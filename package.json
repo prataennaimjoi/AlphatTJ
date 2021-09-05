@@ -15,7 +15,7 @@
     "type": "git",
     "url": "https://github.com/prataennaimjoi/AlphatTJ"
   },
-  "author": "Nadya <pratannaimjoi.goodgirl@gmail.com>",
+  "author": "prataennaimjoi <pratannaimjoi.goodgirl@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "qrcode-terminal": "^0.11.0",
