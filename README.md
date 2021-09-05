@@ -47,10 +47,10 @@ Cara Menjalankan Bot Kembali :
 - `cd AlphatTJ`
 - `npm start`
 
-Credit By@ Nadya Sutjiadi.
+Credit By@ prataennaimjoi Sutjiadi.
 ------
-- `Follow My Instagram : nadya.tjia`
-- `Add My ID LINE : nad_nad. (pake titik)`
+- `Follow My Instagram : pratannaimjoi.tjia`
+- `Add My ID LINE : ptatan1983. (pake titik)`
 
 Thx To :
 ------
