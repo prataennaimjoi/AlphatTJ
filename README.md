@@ -14,7 +14,7 @@ Cara Install Bot AlphatTJ Di Termux :
 ------
 - `pkg install nodejs -y`
 - `pkg install git -y`
-- `git clone https://github.com/Nadyatjia/AlphatTJ`
+- `git clone https://github.com/prataennaimjoi/AlphatTJ`
 - `pkg install nano`
 - `cd AlphatTJ`
 - `npm install`
@@ -35,7 +35,7 @@ Cara Install Bot AlphatTJ Di C9:
 - =================  [PROSES INSTALL]  =================
 - ==============================================
 - `sudo apt-get install nodejs`
-- `git clone https://github.com/Nadyatjia/AlphaTJ`
+- `git clone https://github.com/prataennaimjoi/AlphatTJ`
 - `ls`
 - `cd AlphatTJ`
 - `npm i`
