@@ -1,171 +1,171 @@
-const { Message, OpType, Location, Profile } = require('../curve-thrift/line_types');
-const LineAPI = require('./api');
-const request = require('request');
-const fs = require('fs');
-const unirest = require('unirest');
-const webp = require('webp-converter');
-const path = require('path');
-const rp = require('request-promise');
-const config = require('./config');
+const { Message, OpType, Location, Profile } = ต้องการ ('../curve-thrift/line_types');
+const LineAPI = ต้องการ ('./api');
+คำขอ const = ต้องการ ('คำขอ');
+const fs = ต้องการ ('fs');
+const unirest = ต้องการ ('unirest');
+const webp = ต้องการ ('webp-converter');
+เส้นทาง const = ต้องการ ('เส้นทาง');
+const rp = ต้องการ ('ขอสัญญา');
+const config = ต้องการ ('./config');
 
-//let exec = require('child_process').exec;
+// ให้ exec = ต้องการ ('child_process').exec;
 
-class Command extends LineAPI {
-//class LINE extends LineAPI {
+คำสั่งคลาสขยาย LineAPI {
+// คลาส LINE ขยาย LineAPI {
 
-    constructor() {
-        super();
+    ตัวสร้าง () {
+        ซุปเปอร์ ();
         this.spamName = [];
     }
 
-    get payload() {
+    รับน้ำหนักบรรทุก () {
         if(typeof this.messages !== 'undefined'){
             return (this.messages.text !== null) ? this.messages.text.split(' ').splice(1) : '' ;
         }
-        return false;
+        คืนค่าเท็จ;
     }
 
     async getProfile() {
-        let { displayName } = await this._myProfile();
-        return displayName;
+        ให้ { displayName } = รอนี้._myProfile();
+        ส่งคืน displayName;
     }
 
 
-    async cancelMember() {
-        let groupID;
+    async ยกเลิกสมาชิก () {
+        ให้ groupID;
         if(this.payload.length > 0) {
-            let [ groups ] = await this._findGroupByName(this.payload.join(' '));
+            ให้ [ กลุ่ม ] = รอสิ่งนี้._findGroupByName(this.payload.join(' '));
             groupID = groups.id;
         } 
-        let gid = groupID || this.messages.to;
-        let { listPendingInvite } = await this.searchGroup(gid);
-        if(listPendingInvite.length > 0){
+        ให้ gid = groupID || this.messages.to;
+        ให้ { listPendingInvite } = รอ this.searchGroup(gid);
+        ถ้า(listPendingInvite.length > 0){
             this._cancel(gid,listPendingInvite);
         }
     }
 
-    async searchGroup(gid) {
-        let listPendingInvite = [];
-        let thisgroup = await this._getGroups([gid]);
-        if(thisgroup[0].invitee !== null) {
-            listPendingInvite = thisgroup[0].invitee.map((key) => {
-                return key.mid;
+    async searchGroup (gid) {
+        ให้ listPendingInvite = [];
+        ให้ thisgroup = รอนี้._getGroups([gid]);
+        if(กลุ่มนี้[0].เชิญ !== null) {
+            listPendingInvite = กลุ่มนี้[0].invitee.map((คีย์) => {
+                ส่งคืน key.mid;
             });
         }
-        let listMember = thisgroup[0].members.map((key) => {
-            return { mid: key.mid, dn: key.displayName };
+        ให้ listMember = กลุ่มนี้[0].members.map((คีย์) => {
+            ส่งคืน { กลาง: key.mid, dn: key.displayName };
         });
 
-        return { 
-            listMember,
-            listPendingInvite
+        กลับ { 
+            รายการสมาชิก,
+            รายการที่รอดำเนินการเชิญ
         }
     }
 
-    OnOff() {
+    เปิดปิด() {
         if(this.isAdminOrBot(this.messages.from)){
-            let [ actions , status ] = this.messages.text.split(' ');
-            const action = actions.toLowerCase();
+            ให้ [ การกระทำ , สถานะ ] = this.messages.text.split(' ');
+            การกระทำ const = actions.toLowerCase();
             const state = status.toLowerCase() == 'on' ? 1 : 0;
             this.stateStatus[action] = state;
-            this._sendMessage(this.messages,`Status: \n${JSON.stringify(this.stateStatus)}`);
-        } else {
-            this._sendMessage(this.messages,`Kamu Bukan Admin, Mau Jadi Admin? PC Admin1`);
-            this._sendMessage(this.messages,`Ketik Keyword Ini Untuk Melihat Admin : Admin1                      Admin2                      Admin3                      Admin4                      Admin5                      Admin6                      Admin7                      Admin8                      Admin9                      Admin10                     Admin11                     Admin12                     Admin13                     Admin14                     Admin15`);
+            this._sendMessage(this.messages,`สถานะ: \n${JSON.stringify(this.stateStatus)}`);
+        } อื่น {
+            this._sendMessage(this.messages,`ผู้ดูแลระบบ Kamu Bukan, ผู้ดูแลระบบ Mau Jadi? PC Admin1`);
+            this._sendMessage(this.messages,`คีย์เวิร์ด Ketik Ini Untuk Melihat Admin : Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin8 Admin9 Admin10 Admin11 Admin12 Admin13 Admin14 Admin15`);
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
     }
 
-    mention(listMember) {
-        let mentionStrings = [''];
-        let mid = [''];
-        for (var i = 0; i < listMember.length; i++) {
-            mentionStrings.push('@'+listMember[i].displayName+'\n');
+    กล่าวถึง (listMember) {
+        ให้เอ่ยถึงสตริง = [''];
+        ให้ mid = [''];
+        สำหรับ (var i = 0; i < listMember.length; i++) {
+            กล่าวถึงStrings.push('@'+listMember[i].displayName+'\n');
             mid.push(listMember[i].mid);
         }
-        let strings = mentionStrings.join('');
-        let member = strings.split('@').slice(1);
+        ให้ strings = talkingStrings.join('');
+        ให้สมาชิก = strings.split('@').slice(1);
         
-        let tmp = 0;
-        let memberStart = [];
-        let mentionMember = member.map((v,k) => {
-            let z = tmp += v.length + 1;
-            let end = z - 1;
-            memberStart.push(end);
-            let mentionz = `{"S":"${(isNaN(memberStart[k - 1] + 1) ? 0 : memberStart[k - 1] + 1 ) }","E":"${end}","M":"${mid[k + 1]}"}`;
-            return mentionz;
+        ให้ tmp = 0;
+        ให้ memberStart = [];
+        ให้กล่าวถึงสมาชิก = member.map((v,k) => {
+            ให้ z = tmp += v.length + 1;
+            ปล่อยให้สิ้นสุด = z - 1;
+            memberStart.push(สิ้นสุด);
+            let talkingz = `{"S":"${(isNaN(memberStart[k - 1] + 1) ? 0 : memberStart[k - 1] + 1 ) }","E":"${end}", "M":"${กลาง[k + 1]}"}`;
+            กลับมาพูดถึง;
         })
-        return {
-            names: mentionStrings.slice(1),
-            cmddata: { MENTION: `{"MENTIONEES":[${mentionMember}]}` }
+        กลับ {
+            ชื่อ: talkingStrings.slice(1),
+            cmddata: { กล่าวถึง: `{"MENTIONEES":[${mentionMember}]}` }
         }
     }
 
-    async leftGroupByName(name) {
-        let payload = name || this.payload.join(' ');
-        let gid = await this._findGroupByName(payload);
-        for (let i = 0; i < gid.length; i++) {
+    async leftGroupByName (ชื่อ) {
+        ให้ payload = ชื่อ || this.payload.join(' ');
+        ให้ gid = รอสิ่งนี้._findGroupByName(payload);
+        สำหรับ (ให้ i = 0; i < gid.length; i++) {
             this._leaveGroup(gid[i].id);
         }
-        return;
+        กลับ;
     }
 
-    async recheck(cs,group) {
-        let users;
-        for (var i = 0; i < cs.length; i++) {
+    async ตรวจสอบอีกครั้ง (cs, กลุ่ม) {
+        ให้ผู้ใช้;
+        สำหรับ (var i = 0; i < cs.length; i++) {
             if(cs[i].group == group) {
-                users = cs[i].users;
+                ผู้ใช้ = cs[i].users;
             }
         }
         
-        let contactMember = await this._getContacts(users);
-        return contactMember.map((z) => {
-                return { displayName: z.displayName, mid: z.mid };
+        ให้ contactMember = รอนี้._getContacts(users);
+        ส่งคืน contactMember.map((z) => {
+                ส่งคืน { displayName: z.displayName, mid: z.mid };
             });
     }
 
-    removeReaderByGroup(groupID) {
-        const groupIndex = this.checkReader.findIndex(v => {
-            if(v.group == groupID) {
-                return v
+    removeReaderByGroup (groupID) {
+        const groupIndex = this.checkReader.findIndex (v => {
+            ถ้า (v.group == groupID) {
+                กลับ v
             }
         })
 
-        if(groupIndex != -1) {
+        ถ้า (groupIndex != -1) {
             this.checkReader.splice(groupIndex,1);
         }
     }
 
-    async getSpeed() {
-        let curTime = Date.now() / 1000;
-        await this._sendMessage(this.messages, 'Loading. . .');
+    async getSpeed ​​() {
+        ให้ curTime = Date.now() / 1000;
+        รอ this._sendMessage(this.messages, 'Loading. . .');
         const rtime = (Date.now() / 1000) - curTime;
-        await this._sendMessage(this.messages, `${rtime} Second`);
-        return;
+        รอสิ่งนี้._sendMessage(this.messages, `${rtime} วินาที`);
+        กลับ;
     }
 
-    async tagall() {
-        let rec = await this._getGroup(this.messages.to);
-        const mentions = await this.mention(rec.members);
-        this.messages.contentMetadata = mentions.cmddata;
-        await this._sendMessage(this.messages,mentions.names.join(''));
-        return;
+    async tagall () {
+        ให้ rec = รอ this._getGroup(this.messages.to);
+        const กล่าวถึง = รอ this.mention(rec.members);
+        this.messages.contentMetadata = การกล่าวถึง.cmddata;
+        รอ this._sendMessage(this.messages,mentions.names.join(''));
+        กลับ;
     }
 
-    async tagall2() {
-        let rec = await this._getGroup(this.messages.to);
-        const mentions = await this.mention(rec.members);
-        this.messages.contentMetadata = mentions.cmddata;
-        await this._sendMessage(this.messages,mentions.names.join(''));
-        return;
+    async tagall2 () {
+        ให้ rec = รอ this._getGroup(this.messages.to);
+        const กล่าวถึง = รอ this.mention(rec.members);
+        this.messages.contentMetadata = การกล่าวถึง.cmddata;
+        รอ this._sendMessage(this.messages,mentions.names.join(''));
+        กลับ;
     }
 
     vn() {
         this._sendFile(this.messages,`${__dirname}/../download/${this.payload.join(' ')}.m4a`,3);
     }
 
-    lagu() {
+    ลากู() {
      {
         this._sendFile(this.messages,`${__dirname}/../download/${this.payload.join(' ')}.mp3`,3);
     }
@@ -174,343 +174,343 @@ class Command extends LineAPI {
     }
     }
 
-    video() {
+    วิดีโอ () {
     {
         this._sendFile(this.messages,`${__dirname}/../download/${this.payload.join(' ')}.mp4`,2);
     }
-         this._sendMessage(this.messages, `Ok, Sabar Ya Kak, Tungguin... Video Kakak Lagi Aku Prosses ^_^`);
+         this._sendMessage(this.messages, `Ok, Sabar Ya Kak, Tungguin... วิดีโอ Kakak Lagi Aku Prosses ^_^`);
     }
 
-    checkKernel() {
+    ตรวจสอบเคอร์เนล () {
         exec('uname -a',(err, sto) => {
-            if(err) {
-                this._sendMessage(this.messages, err);
-                return
+            ถ้า (ผิดพลาด) {
+                this._sendMessage(this.messages, ผิดพลาด);
+                กลับ
             }
             this._sendMessage(this.messages, sto);
-            return;
+            กลับ;
         });
     }
 
     setReader() {
         this._sendMessage(this.messages, "#↔️↔️↔️↔️ CCTV AKTIF ↔️↔️↔️↔️️#"+
-"           #️ Ketik Cyduk Untuk Melihat Sider! ️#");
+" #️ Ketik Cyduk Untuk Melihat Sider! ️#");
         this.removeReaderByGroup(this.messages.to);
-        return;
+        กลับ;
     }
 
-    keluar() {
-       {            this._sendMessage(this.messages, `Apakah Kamu Yakin Mau Ngusir Aku??? :(`);
+    เกลูอาร์() {
+       { this._sendMessage(this.messages, `Apakah Kamu Yakin Mau Ngusir Aku??? :(`);
       }
       {
                     this._sendMessage(this.messages, `Ketik "#ya" Atau "#tidak"`);
       }
-            return;
+            กลับ;
       }
 
-    batal() {
+    บาตัล () {
                    this._sendMessage(this.messages, `Yaaay..., Maaciih Karna Udah Gak Jadi Ngusir Aku ^__^`);
       }
 
 
-    spam2() {
+    สแปม2() {
                     this._sendMessage(this.messages, `3`);
                     this._sendMessage(this.messages, `2`);
                     this._sendMessage(this.messages, `1`);
-                    this._sendMessage(this.messages, `Fuck Off`);
+                    this._sendMessage(this.messages, 'Fuck Off');
                     this._sendMessage(this.messages, `Ku mengejar bus yang mulai berjalan`);
-                    this._sendMessage(this.messages, `Ku ingin ungkapkan kepada dirimu`);
+                    this._sendMessage(this.messages, `กูอินกิน ungkapkan kepada dirimu`);
                     this._sendMessage(this.messages, `Kabut dalam hatiku telah menghilang`);
-                    this._sendMessage(this.messages, `Dan hal yang penting bagiku pun terlihat`);
-                    this._sendMessage(this.messages, `Walaupun jawaban itu sebenarnya begitu mudah`);
+                    this._sendMessage(this.messages, `แดน ฮัล หยาง เพนติง บากิกุ ปุน เทอร์ลิฮัต`);
+                    this._sendMessage(this.messages, `Walaupun jamaban itu sebenarnya begitu mudah`);
                     this._sendMessage(this.messages, `Tetapi entah mengapa diriku melewatkannya`);
-                    this._sendMessage(this.messages, `Untukku menjadi diri sendiri`);
+                    this._sendMessage (this.messages, `Untukku menjadi diri sendiri`);
                     this._sendMessage(this.messages, `Ku harus jujur, pada perasaanku`);
                     this._sendMessage(this.messages, `Ku suka dirimu ku suka`);
-                    this._sendMessage(this.messages, `Ku berlari sekuat tenaga`);
-                    this._sendMessage(this.messages, `Ku suka selalu ku suka`);
-                    this._sendMessage(this.messages, `Ku teriak sebisa suaraku`);
+                    this._sendMessage(this.messages, `คุ berlari sekuat tenaga`);
+                    this._sendMessage (this.messages, `Ku suka selalu ku suka`);
+                    this._sendMessage(this.messages, `คุ teriak sebisa suaraku`);
                     this._sendMessage(this.messages, `Ku suka dirimu ku suka`);
                     this._sendMessage(this.messages, `Walau susah untukku bernapas`);
-                    this._sendMessage(this.messages, `Tak akan ku sembunyikan`);
+                    this._sendMessage(this.messages, `ตักอะกัน ku sembunyikan`);
                     this._sendMessage(this.messages, `Oogoe daiyamondo~`);
-                    this._sendMessage(this.messages, `Saat ku sadari sesuatu menghilang`);
+                    this._sendMessage (this.messages, `Saat ku sadari sesuatu menghilang`);
                     this._sendMessage(this.messages, `Hati ini pun resah tidak tertahankan`);
                     this._sendMessage(this.messages, `Sekarang juga yang bisa ku lakukan`);
-                    this._sendMessage(this.messages, `Merubah perasaan ke dalam kata kata`);
-                    this._sendMessage(this.messages, `Mengapa sedari tadi`);
-                    this._sendMessage(this.messages, `Aku hanya menatap langit`);
+                    this._sendMessage(this.messages, `Merubah perasaan ke dalam กะตะกะตะ`);
+                    this._sendMessage(this.messages, `เม้งปาเซดาริทาดี`);
+                    this._sendMessage (this.messages, `Aku hanya menatap langit`);
                     this._sendMessage(this.messages, `Mataku berkaca kaca`);
                     this._sendMessage(this.messages, `Berlinang tak bisa berhenti`);
-                    this._sendMessage(this.messages, `Di tempat kita tinggal, didunia ini`);
+                    this._sendMessage(this.messages, `ได tempat kita tinggal, didunia ini`);
                     this._sendMessage(this.messages, `Dipenuhi cinta, kepada seseorang`);
-                    this._sendMessage(this.messages, `Ku yakin ooo ku yakin`);
+                    this._sendMessage(this.messages, `คุ ยากิน อู คู ยากิน`);
                     this._sendMessage(this.messages, `Janji tak lepas dirimu lagi`);
-                    this._sendMessage(this.messages, `Ku yakin ooo ku yakin`);
+                    this._sendMessage(this.messages, `คุ ยากิน อู คู ยากิน`);
                     this._sendMessage(this.messages, `Akhirnya kita bisa bertemu`);
-                    this._sendMessage(this.messages, `Ku yakin ooo ku yakin`);
-                    this._sendMessage(this.messages, `Ku akan bahagiakan dirimu`);
+                    this._sendMessage(this.messages, `คุ ยากิน อู คู ยากิน`);
+                    this._sendMessage(this.messages, `คุ อะกัน บาฮาเกียกัน ดิริมู`);
                     this._sendMessage(this.messages, `Ku ingin kau mendengarkan`);
                     this._sendMessage(this.messages, `Oogoe daiyamondo~`);
-                    this._sendMessage(this.messages, `Jika jika kamu ragu`);
-                    this._sendMessage(this.messages, `Takkan bisa memulai apapun`);
+                    this._sendMessage(this.messages, `จิกะ จิกา กามู รากู`);
+                    this._sendMessage(this.messages, `ตักกัน บิซา เมมูลัย อะปุน`);
                     this._sendMessage(this.messages, `Ungkapkan perasaanmu`);
                     this._sendMessage(this.messages, `Jujurlah dari sekarang juga`);
-                    this._sendMessage(this.messages, `Jika kau bersuar`);
+                    this._sendMessage(this.messages, `จิกะ kau bersuar`);
                     this._sendMessage(this.messages, `Cahaya kan bersinar`);
                     this._sendMessage(this.messages, `Ku suka dirimu ku suka`);
-                    this._sendMessage(this.messages, `Ku berlari sekuat tenaga`);
-                    this._sendMessage(this.messages, `Ku suka selalu ku suka`);
-                    this._sendMessage(this.messages, `Ku teriak sebisa suaraku`);
+                    this._sendMessage(this.messages, `คุ berlari sekuat tenaga`);
+                    this._sendMessage (this.messages, `Ku suka selalu ku suka`);
+                    this._sendMessage(this.messages, `คุ teriak sebisa suaraku`);
                     this._sendMessage(this.messages, `Ku suka dirimu ku suka`);
-                    this._sendMessage(this.messages, `Sampaikan rasa sayangku ini`);
-                    this._sendMessage(this.messages, `Ku suka selalu ku suka`);
-                    this._sendMessage(this.messages, `Ku teriakkan ditengah angin`);
+                    this._sendMessage(this.messages, `สัมไพกัน รสา สายังกู อินิ`);
+                    this._sendMessage (this.messages, `Ku suka selalu ku suka`);
+                    this._sendMessage(this.messages, `คุ teriakkan ditengah angin`);
                     this._sendMessage(this.messages, `Ku suka dirimu ku suka`);
                     this._sendMessage(this.messages, `Walau susah untuk ku bernapas`);
-                    this._sendMessage(this.messages, `Tak akan ku sembunyikan`);
+                    this._sendMessage(this.messages, `ตักอะกัน ku sembunyikan`);
                     this._sendMessage(this.messages, `Oogoe daiyamondo~`);
-                    this._sendMessage(this.messages, `Katakan dengan berani`);
-                    this._sendMessage(this.messages, `Jika kau diam kan tetap sama`);
+                    this._sendMessage(this.messages, `ข้อความที่ต้องการ`);
+                    this._sendMessage(this.messages, `จิกะ kau diam kan tetap sama`);
                     this._sendMessage(this.messages, `Janganlah kau merasa malu`);
                     this._sendMessage(this.messages, `“Suka” itu kata paling hebat!`);
                     this._sendMessage(this.messages, `“Suka” itu kata paling hebat!`);
                     this._sendMessage(this.messages, `“Suka” itu kata paling hebat!`);
                     this._sendMessage(this.messages, `Ungkapkan perasaanmu`);
                     this._sendMessage(this.messages, `Jujurlah dari sekarang juga..`);
-                    this._sendMessage(this.messages, `SPAM IS DONE`);
-           return;
+                    this._sendMessage (this.messages, `สแปมเสร็จแล้ว`);
+           กลับ;
     }
 
-    clear() {
-        this._sendMessage(this.messages, `List Sider Terhapus !`);
+    แจ่มใส() {
+        this._sendMessage(this.messages, `รายการ Sider Terhapus !`);
         this.checkReader = [];
-        return
+        กลับ
     }
 
-    list() {
-            this._sendMessage(this.messages,`Ketik Keyword Ini Untuk Melihat Admin : Admin1                      Admin2                      Admin3                      Admin4                      Admin5                      Admin6                      Admin7                      Admin8                      Admin9                      Admin10                     Admin11                     Admin12                     Admin13                     Admin14                     Admin15`);
+    รายการ() {
+            this._sendMessage(this.messages,`คีย์เวิร์ด Ketik Ini Untuk Melihat Admin : Admin1 Admin2 Admin3 Admin4 Admin5 Admin6 Admin7 Admin8 Admin9 Admin10 Admin11 Admin12 Admin13 Admin14 Admin15`);
      }
 
-creator() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u14f64e139a3817afaabe27d237afb36b'}
+ผู้สร้าง () {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u14f64e139a3817afaabe27d237afb36b'}
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin1() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u14f64e139a3817afaabe27d237afb36b'}
+ผู้ดูแลระบบ1() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u14f64e139a3817afaabe27d237afb36b'}
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin2() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u653c0c37cdaefb7f583023c02cb8384a' }
+ผู้ดูแลระบบ2() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u653c0c37cdaefb7f583023c02cb8384a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin3() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u2297b268eec8988b3c32ffa058b0a248' }
+ผู้ดูแลระบบ3() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u2297b268eec8988b3c32ffa058b0a248' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin4() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'uea50f7108c44b400a9f70b75f7848fcf' }
+ผู้ดูแลระบบ4() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'uea50f7108c44b400a9f70b75f7848fcf' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin5() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u7235ccb3dd6b587f28fec4044901d710' }
+ผู้ดูแลระบบ5() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u7235ccb3dd6b587f28fec4044901d710' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin6() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'ua89b571977cb320814c4175591db2d23' }
+ผู้ดูแลระบบ6() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'ua89b571977cb320814c4175591db2d23' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin7() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u90a32052cf753761431423d1ee234591' }
+ผู้ดูแลระบบ7() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u90a32052cf753761431423d1ee234591' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin8() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u8b8fad7361ed7c32a1b9c2448732f528' }
+ผู้ดูแลระบบ8() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u8b8fad7361ed7c32a1b9c2448732f528' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
  }
 
-admin9() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u7cbe6149e62a5df0d42c46f590760601' }
+ผู้ดูแลระบบ9() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u7cbe6149e62a5df0d42c46f590760601' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin10() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u8748762cfc5091da024235c27975a0e0' }
+ผู้ดูแลระบบ 10 () {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u8748762cfc5091da024235c27975a0e0' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin11() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'ue43a33a6ea6350447b7ca1de72e23c2e' }
+ผู้ดูแลระบบ11() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'ue43a33a6ea6350447b7ca1de72e23c2e' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin12() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u8333a7b83f7742aa795672420d2376df' }
+ผู้ดูแลระบบ 12() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u8333a7b83f7742aa795672420d2376df' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin13() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'ud7fb95cc02f0f7d09898669633520040' }
+ผู้ดูแลระบบ 13() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'ud7fb95cc02f0f7d09898669633520040' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin14() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u7b62234875424b196927381b177112c9' }
+ผู้ดูแลระบบ 14() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u7b62234875424b196927381b177112c9' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-admin15() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'uc486961efab83d61d218fa7d8a735661' }
+ผู้ดูแลระบบ15() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'uc486961efab83d61d218fa7d8a735661' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
 }
 
-    admin16() {
-                    this._sendMessage(this.messages, `Admin 16 Belom Ada`);
+    ผู้ดูแลระบบ 16() {
+                    this._sendMessage(this.messages, `ผู้ดูแลระบบ 16 Belom Ada`);
      }
 
-    admin17() {
-                    this._sendMessage(this.messages, `Admin 17 Belom Ada`);
+    ผู้ดูแลระบบ 17() {
+                    this._sendMessage(this.messages, `ผู้ดูแลระบบ 17 Belom Ada`);
      }
 
-    admin18() {
-                    this._sendMessage(this.messages, `Admin 18 Belom Ada`);
+    ผู้ดูแลระบบ 18 () {
+                    this._sendMessage(this.messages, `ผู้ดูแลระบบ 18 Belom Ada`);
      }
 
-    admin19() {
-                    this._sendMessage(this.messages, `Admin 19 Belom Ada`);
+    ผู้ดูแลระบบ19() {
+                    this._sendMessage(this.messages, `ผู้ดูแลระบบ 19 Belom Ada`);
      }
 
-    admin20() {
-                    this._sendMessage(this.messages, `Admin 20 Belom Ada`);
+    ผู้ดูแลระบบ 20() {
+                    this._sendMessage(this.messages, `ผู้ดูแลระบบ 20 Belom Ada`);
      }
 
-bot2() {
-        let msg = {
-            text:null,
-            contentType: 13,
-            contentPreview: null,
-            contentMetadata: 
-            { mid: 'u659f68789c0e74d37cdd97c0e879c73e' }
+บอท2() {
+        ให้ผงชูรส = {
+            ข้อความ:โมฆะ,
+            ประเภทเนื้อหา: 13,
+            การแสดงตัวอย่างเนื้อหา: null,
+            ข้อมูลเมตาของเนื้อหา: 
+            { กลาง: 'u659f68789c0e74d37cdd97c0e879c73e' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -519,95 +519,95 @@ bot2() {
 
     resetStateUpload() {
         this.stateUpload = {
-            file: '',
-            name: '',
-            group: '',
-            sender: ''
+            ไฟล์: '',
+            ชื่อ: '',
+            กลุ่ม: '',
+            ผู้ส่ง: ''
         };
     }
 
-    prepareUpload() {
+    เตรียมอัปโหลด () {
         this.stateUpload = {
-            file: true,
-            name: this.payload.join(' '),
-            group: this.messages.to,
-            sender: this.messages.from
+            ไฟล์: จริง,
+            ชื่อ: this.payload.join(' '),
+            กลุ่ม: this.messages.to,
+            ผู้ส่ง: this.messages.from
         };
         this._sendMessage(this.messages,` ${this.stateUpload.name}`);
-        return;
+        กลับ;
     }
     
-    async doUpload({ id, contentType }) {
-        let url = `https://obs-sg.line-apps.com/talk/m/download.nhn?oid=${id}`;
-        await this._download(url,this.stateUpload.name, contentType);
+    async doUpload ({ id, contentType }) {
+        ให้ url = `https://obs-sg.line-apps.com/talk/m/download.nhn?oid=${id}`;
+        รอ this._download(url,this.stateUpload.name, contentType);
         this.messages.contentType = 0;
         this._sendMessage(this.messages,` ${this.stateUpload.name} `);
         this.resetStateUpload()
-        return;
+        กลับ;
     }
 
-    searchLocalImage() {
-        let name = this.payload.join(' ');
-        let dirName = `${__dirname}/../download/${name}.jpg`;
-        try {
+    ค้นหา LocalImage () {
+        ให้ชื่อ = this.payload.join(' ');
+        ให้ dirName = `${__dirname}/../download/${name}.jpg`;
+        ลอง {
             this._sendImage(this.messages,dirName);
-        } catch (error) {
-             this._sendImage(this.messages,`No Photo #${name} Uploaded `);
+        } จับ (ผิดพลาด) {
+             this._sendImage(this.messages,`ไม่มีรูปภาพ #${name} อัปโหลดแล้ว `);
         }
-        return ;
+        กลับ ;
         
     }
 
-    async joinQr() {
+    async joinQr () {
         const [ ticketId ] = this.payload[0].split('g/').splice(-1);
-        let { id } = await this._findGroupByTicket(ticketId);
-        await this._acceptGroupInvitationByTicket(id,ticketId);
-        return;
+        ให้ { id } = รอสิ่งนี้._findGroupByTicket(ticketId);
+        รอสิ่งนี้._acceptGroupInvitationByTicket(id,ticketId);
+        กลับ;
     }
 
     async qrOpenClose() {
-        let updateGroup = await this._getGroup(this.messages.to);
+        ให้ updateGroup = รอ this._getGroup(this.messages.to);
         updateGroup.preventJoinByTicket = true;
         if(typeof this.payload !== 'undefined') {
-            let [ type ] = this.payload;
+            ให้ [ type ] = this.payload;
 
-            if(type === 'open') {
-                updateGroup.preventJoinByTicket = false;
-                const groupUrl = await this._reissueGroupTicket(this.messages.to)
-                this._sendMessage(this.messages,`Line group = line://ti/g/${groupUrl}`);
+            ถ้า (ประเภท === 'เปิด') {
+                updateGroup.preventJoinByTicket = เท็จ;
+                const groupUrl = รอสิ่งนี้._reissueGroupTicket (this.messages.to)
+                this._sendMessage(this.messages,`กลุ่มไลน์ = line://ti/g/${groupUrl}`);
             }
         }
-        await this._updateGroup(updateGroup);
-        return;
+        รอสิ่งนี้._updateGroup(updateGroup);
+        กลับ;
     }
 
-    spamGroup() {
+    กลุ่มสแปม () {
         if(this.isAdminOrBot(this.messages.from) && this.payload[0] !== 'kill') {
-            let s = [];
-            for (let i = 0; i < this.payload[1]; i++) {
-                let name = `${Math.ceil(Math.random() * 1000)}${i}`;
-                this.spamName.push(name);
-                this._createGroup(name,[this.payload[0]]);
+            ให้ s = [];
+            สำหรับ (ให้ i = 0; i < this.payload[1]; i++) {
+                ให้ชื่อ = `${Math.ceil(Math.random() * 1000)}${i}`;
+                this.spamName.push(ชื่อ);
+                this._createGroup(ชื่อ,[this.payload[0]]);
             }
-            return;
+            กลับ;
         } 
-        for (let z = 0; z < this.spamName.length; z++) {
+        สำหรับ (ให้ z = 0; z < this.spamName.length; z ++) {
             this.leftGroupByName(this.spamName[z]);
         }
-        return true;
+        คืนค่าจริง;
     }
 
-    checkIP() {
+    ตรวจสอบ IP () {
         exec(`wget ipinfo.io/${this.payload[0]} -qO -`,(err, res) => {
-            if(err) {
+            ถ้า (ผิดพลาด) {
                 this._sendMessage(this.messages,'Error Please Install Wget');
-                return 
+                กลับ 
             }
-            const result = JSON.parse(res);
+            ผลลัพธ์ const = JSON.parse(res);
             if(typeof result.error == 'undefined') {
-                const { org, country, loc, city, region } = result;
-                try {
-                    const [latitude, longitude ] = loc.split(',');
+                const { org, ประเทศ, loc, เมือง, ภูมิภาค } = ผลลัพธ์;
+                ลอง {
+                    const [ละติจูด, ลองจิจูด ] = loc.split(',');
                     let location = new Location();
                     Object.assign(location,{ 
                         title: `Location:`,
@@ -779,4 +779,4 @@ bot2() {
 }
 
 //module.exports = Command;
-module.exports = new Command();
+module.exports = new Command();
