@@ -28,7 +28,7 @@ var moment = ต้องการ ('ช่วงเวลา');
         console.info(`[*] ชื่อ: ${displayName}`);
         รอ this._tokenLogin(this.authToken, this.certificate);
 		รอ._chanConn();
-		ให้ icH = รอนี้._channel.issueChannelToken("1626556804");config.chanToken = icH.channelAccessToken;
+		ให้ icH = รอนี้._channel.issueChannelToken("1626602314");config.chanToken = icH.channelAccessToken;
 		ให้ xxc = icH.expiration;ให้ xcc = xxc.toString().split(" ");ให้ xc = xcc.toString();
 		ปล่อยให้หมดอายุCH = moment("/Date("+xc+"-0700)/")toString();
 		console.info("[*] ChannelToken: "+icH.channelAccessToken);
@@ -46,7 +46,7 @@ var moment = ต้องการ ('ช่วงเวลา');
 		คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
 		    this._tokenLogin(this.authToken, this.certificate);
 		    this._chanConn();
-		    this._channel.issueChannelToken("1626556804",(ผิดพลาด ผลลัพธ์)=>{
+		    this._channel.issueChannelToken("1626602314",(ผิดพลาด ผลลัพธ์)=>{
 				config.chanToken = result.channelAccessToken;
 				this._client.getLastOpRevision((ผิดพลาด,ผลลัพธ์)=>{
 					ให้ xrx = result.toString().split(" ");
@@ -62,7 +62,7 @@ var moment = ต้องการ ('ช่วงเวลา');
 				console.info("เข้าสู่ระบบสำเร็จ!");
 				console.info(`\n[*] โทเค็น: ${config.tokenn}`);
 				this.config.Headers['X-Line-Access'] = config.tokenn;
-				this._channel.issueChannelToken("1626556804",(ผิดพลาด ผลลัพธ์)=>{
+				this._channel.issueChannelToken("1626602314",(ผิดพลาด ผลลัพธ์)=>{
 					config.chanToken = result.channelAccessToken;
 					this._client.getLastOpRevision((ผิดพลาด,ผลลัพธ์)=>{
 					    ให้ xrx = result.toString().split(" ");
