@@ -1,61 +1,61 @@
-const LineAPI = require('./api');
-const request = require('request');
-const fs = require('fs');
-const unirest = require('unirest');
-const webp = require('webp-converter');
-const path = require('path');
-const rp = require('request-promise');
-const config = require('./config');
-const { Message, OpType, Location } = require('../curve-thrift/line_types');
-//let exec = require('child_process').exec;
+const LineAPI = ต้องการ ('./api');
+คำขอ const = ต้องการ ('คำขอ');
+const fs = ต้องการ ('fs');
+const unirest = ต้องการ ('unirest');
+const webp = ต้องการ ('webp-converter');
+เส้นทาง const = ต้องการ ('เส้นทาง');
+const rp = ต้องการ ('ขอสัญญา');
+const config = ต้องการ ('./config');
+const { Message, OpType, Location } = ต้องการ ('../curve-thrift/line_types');
+// ให้ exec = ต้องการ ('child_process').exec;
 
 //TOLONG GANTI SEMUA SEPERTI LOCKUPDATEGROUP TAPI MSG SERTA UNMUTE/MUTE JAN LU OTAK ATIK BEGO~//
-const myBott = ['u14f64e139a3817afaabe27d237afb36b','u49f93172b8c8865683dd2d47ccbb8613','uafa4799654e54457c87031c450f1ae42','u9e95a04f463bca969d248318b63281d0','u8bc7bff0a03e8a6e62d710a615c43dc3','uf2e49f5a15357adee664f757e1bedbfd'];//TARO MID LU DISINI SUPAYA BISA PKE COMMAND STAFF
+const myBott = [ 'u14f64e139a3817afaabe27d237afb36b', 'u49f93172b8c8865683dd2d47ccbb8613', 'uafa4799654e54457c87031c450f1ae42', 'u9e95a04f463bca969d248318b63281d0', 'u8bc7bff0a03e8a6e62d710a615c43dc3', 'uf2e49f5a15357adee664f757e1bedbfd']; // TARO MID LU Disini Supaya Bisa PKE COMMAND STAFF
 
-const myBot = ['u14f64e139a3817afaabe27d237afb36b','u49f93172b8c8865683dd2d47ccbb8613','uafa4799654e54457c87031c450f1ae42','u9e95a04f463bca969d248318b63281d0','u8bc7bff0a03e8a6e62d710a615c43dc3','uf2e49f5a15357adee664f757e1bedbfd'];//TARO MID LU DISINI
-var vx = {};var midnornama = "";var pesane = "";var kickhim = "";var waitMsg = "no";//DO NOT CHANGE THIS
+const myBot = [ 'u14f64e139a3817afaabe27d237afb36b', 'u49f93172b8c8865683dd2d47ccbb8613', 'uafa4799654e54457c87031c450f1ae42', 'u9e95a04f463bca969d248318b63281d0', 'u8bc7bff0a03e8a6e62d710a615c43dc3', 'uf2e49f5a15357adee664f757e1bedbfd']; // TARO MID LU Disini
+var vx = {};var midnornama = "";var pesane = "";var kickhim = "";var waitMsg = "no";//ห้ามเปลี่ยนแปลงสิ่งนี้
 
-function isAdminOrBot(param) {
-    return myBot.includes(param);
+ฟังก์ชัน isAdminOrBot (พารามิเตอร์) {
+    ส่งคืน myBot.includes(param);
 }
 
-function isStaffOrBot(param) {
-    return myBott.includes(param);
+ฟังก์ชัน isStaffOrBot (พารามิเตอร์) {
+    ส่งคืน myBott.includes(param);
 }
 
-function firstToUpperCase(str) {
-    return str.substr(0, 1).toUpperCase() + str.substr(1);
+ฟังก์ชัน firstToUpperCase(str) {
+    ส่งคืน str.substr(0, 1).toUpperCase() + str.substr(1);
 }
 
-function isTGet(string,param){
-	return string.includes(param);
+ฟังก์ชัน isTGet(สตริง,พารามิเตอร์){
+	ส่งคืน string.includes (พารามิเตอร์);
 }
 
 
-class LINE extends LineAPI {
-    constructor() {
-        super();
+คลาส LINE ขยาย LineAPI {
+    ตัวสร้าง () {
+        ซุปเปอร์ ();
         this.receiverID = '';
         this.checkReader = [];
         this.sendStaff = 0;
         this.stateStatus = {
-            mute: 0,
-            lockinvite: 0,
+            ปิดเสียง: 0,
+            ล็อคอินเชิญ: 0,
             lockupdategroup: 0,
-            lockjoin: 0,
-            lockcancel: 0,
-            autokick:0,
-            autojoin:0,
-            cancel: 0,
+            ล็อคจอย: 0,
+            ยกเลิกล็อค: 0,
+            ออโต้คิก:0,
+            เข้าร่วมอัตโนมัติ:0,
+            ยกเลิก: 0
             bc: 0,
-            sambutan: 0,
+            ซัมบูตัน: 0,
         }
     }
 
-    getOprationType(operations) {
-        for (let key in OpType) {
+    getOprationType (การดำเนินการ) {
+        สำหรับ (ให้ป้อน OpType) {
             if(operations.type == OpType[key]) {
-                if(key !== 'NOTIFIED_UPDATE_PROFILE') {
+                if (คีย์ !== 'NOTIFIED_UPDATE_PROFILE') {
                     console.info(`[* ${operations.type} ] ${key} `);
                 }
             }
@@ -63,21 +63,21 @@ class LINE extends LineAPI {
     }
 
 
-    poll(operation) {
+    แบบสำรวจความคิดเห็น (การดำเนินการ) {
         if(operation.type == 25 || operation.type == 26) {
-//        if(operation.type == 25) { 
-//        if(operation.type == 26) { 		
-            const txt = (operation.message.text !== '' && operation.message.text != null ) ? operation.message.text : '' ;
-            let message = new Message(operation.message);
+// if(operation.type == 25) { 
+// if(operation.type == 26) { 		
+            const txt = (operation.message.text !== '' && operation.message.text != null) ? operation.message.text : '' ;
+            ให้ข้อความ = ข้อความใหม่ (operation.message);
             this.receiverID = message.to = (operation.message.to === myBot[0]) ? operation.message.from : operation.message.to ;
-            Object.assign(message,{ ct: operation.createdTime.toString() });
-            if(waitMsg == "yes" && operation.message.from == vx[0] && this.stateStatus.mute != 1){
-				this.textMessage(txt,message,message.text)
-			}else if(this.stateStatus.mute != 1){this.textMessage(txt,message);
-			}else if(txt == "unmute" && this.stateStatus.mute == 1){
+            Object.assign(ข้อความ,{ ct: operation.createdTime.toString() });
+            if(waitMsg == "ใช่" && operation.message.from == vx[0] && this.stateStatus.mute != 1){
+				this.textMessage(txt,ข้อความ,ข้อความ.ข้อความ)
+			} อื่น if(this.stateStatus.mute != 1){this.textMessage(txt,message);
+			} อื่น if (txt == "เปิดเสียง" && this.stateStatus.mute == 1){
 			    this.stateStatus.mute = 0;
-			    this._sendMessage(message,"BOT ON")
-		    }else{console.info("Bot Off");}
+			    this._sendMessage(ข้อความ,"BOT ON")
+		    }else{console.info("ปิดบอท");}
         }
 
         if(operation.type == 13 && this.stateStatus.cancel == 1) {
@@ -95,22 +95,22 @@ class LINE extends LineAPI {
            }
 
 		if(operation.type == 11 && this.stateStatus.lockupdategroup == 1){//update group (open qr)
-		    let seq = new Message();
+		    ให้ seq = ข้อความใหม่ ();
 			seq.to = operation.param1;
 			this.textMessage("0103",seq,operation.param2,1);
-		}else if(operation.type == 11 && this.stateStatus.lockupdategroup == 1){
-			let seq = new Message();
+		}อื่น if(operation.type == 11 && this.stateStatus.lockupdategroup == 1){
+			ให้ seq = ข้อความใหม่ ();
 			seq.to = operation.param1;
 	     this.textMessage("0104",seq,operation.param2,1);
-		}else if(operation.type == 11 && this.stateStatus.lockupdategroup == 0){
-			let seq = new Message();
+		}อื่น if(operation.type == 11 && this.stateStatus.lockupdategroup == 0){
+			ให้ seq = ข้อความใหม่ ();
 			seq.to = operation.param1;
 	    this.textMessage("0103",seq,operation.param2,1);
 		}
 
            if(operation.type == 11 && this.stateStatus.lockupdategroup == 1) { //ada update
-           // op1 = group nya
-           // op2 = yang 'nge' update
+           // op1 = กลุ่ม nya
+           // op2 = อัปเดต หยาง 'เงอ'
            if(!isAdminOrBot(operation.param2) && !isStaffOrBot(operation.param2)) {
               this._kickMember(operation.param1,[operation.param2]);
              }
@@ -118,36 +118,36 @@ class LINE extends LineAPI {
            }
 
           if(operation.type == 15 && this.stateStatus.sambutan == 1) {
-             let out = new Message();
+             ปล่อย = ข้อความใหม่ ();
              out.to = operation.param1;
 
-             out.text = "Yah Kok Leave? Sampai Ketemu Lagi :("
-			     this._client.sendMessage(0, out);
+             out.text = "ยะกก ลาออกไหม สามัคคี เกเตมู ลากิ :("
+			     this._client.sendMessage(0, ออก);
             }
 
             if(operation.type == 17 && this.stateStatus.sambutan == 1) {
 
-               let kam = new Message();
+               ให้ kam = ข้อความใหม่ ();
                kam.to = operation.param1;
-               kam.text = "Selamat Datang, Jangan Lupa Berbaur Yah ^_^"
+               kam.text = "Selamat Datang, Jangan Lupa Berbaur ย่าห์ ^_^"
                this._client.sendMessage(0, kam);
-               let kom = new Message();
+               ให้ kom = ข้อความใหม่ ();
                kom.contentType = 7
                kom.contentMetadata = {'STKID':'247','STKPKGID':'3','STKVER':'100'};
-               this._client.sendMessage(0, kom);               
+               this._client.sendMessage(0, คอม);               
              }
 
            if(operation.type == 16 && this.stateStatus.sambutan == 1) {
-             let itil = new Message();
+             ให้ itil = ข้อความใหม่ ();
              itil.to = operation.param1;
-             itil.text = "Terima Kasih Telah Invite Saya Di Group Anda ^_^\n\nSilahkan Ketik [help] Untuk Mengetahui Command Bot Kami.\n\n-NADYA-"
+             itil.text = "Terima Kasih Telah เชิญ Saya Di Group Anda ^_^\n\nSilahkan Ketik [help] Untuk Mengetahui Command Bot Kami.\n\n-NADYA-"
              this._client.sendMessage(0, itil);
            }
 
            if(operation.type == 19 && this.stateStatus.sambutan == 1) {
-             let plerrr = new Message();
+             ให้ plerrr = ข้อความใหม่ ();
              plerrr.to = operation.param1;
-             plerrr.text = "Gosah Maen Kick Kick An Asuw_-"
+             plerrr.text = "Gosah แมน เตะ เตะ อะสุว _-"
              this._client.sendMessage(0, plerrr);
            }
 
@@ -159,10 +159,10 @@ class LINE extends LineAPI {
            }
 
            if(operation.type == 19 && this.stateStatus.autokick == 1) { //ada kick
-            // op1 = group nya
-            // op2 = yang 'nge' kick
-            // op3 = yang 'di' kick
-            if(isAdminOrBot(operation.param3) && isStaffOrBot(operation.param3)) {
+            // op1 = กลุ่ม nya
+            // op2 = หยาง 'เอ๋อ' เตะ
+            // op3 = หยาง ดิ คิก
+            ถ้า (isAdminOrBot (operation.param3) && isStaffOrBot (operation.param3)) {
                this._invite(operation.param1,[operation.param3]);
             }
             if(!isAdminOrBot(operation.param2) && !isStaffOrBot(operation.param2)) {
@@ -172,10 +172,10 @@ class LINE extends LineAPI {
         }
 
         if(operation.type == 32 && this.stateStatus.lockcancel == 1) { //ada cancel
-          // op1 = group nya
-          // op2 = yang 'nge' cancel
-          // op3 = yang 'di' cancel
-          if(isAdminOrBot(operation.param3) && isStaffOrBot(operation.param3)) {
+          // op1 = กลุ่ม nya
+          // op2 = yang 'nge' ยกเลิก
+          // op3 = หยาง 'ดี' ยกเลิก
+          ถ้า (isAdminOrBot (operation.param3) && isStaffOrBot (operation.param3)) {
               this._invite(operation.param1,[operation.param3]);
           }
           if(!isAdminOrBot(operation.param2) && !isStaffOrBot(operation.param2)) {
@@ -184,21 +184,21 @@ class LINE extends LineAPI {
 
         }
 
-        if(operation.type == 13 && this.stateStatus.autojoin == 1){ //di invite
+        if(operation.type == 13 && this.stateStatus.autojoin == 1){ //di ขอเชิญ
                 this._acceptGroupInvitation(operation.param1);
       }
 
         if(operation.type == 55){ //ada reader
 
-            const idx = this.checkReader.findIndex((v) => {
+            const idx = this.checkReader.findIndex ((v) => {
                 if(v.group == operation.param1) {
-                    return v
+                    กลับ v
                 }
             })
             if(this.checkReader.length < 1 || idx == -1) {
-                this.checkReader.push({ group: operation.param1, users: [operation.param2], timeSeen: [operation.param3] });
-            } else {
-                for (var i = 0; i < this.checkReader.length; i++) {
+                this.checkReader.push ({ กลุ่ม: operation.param1, ผู้ใช้: [operation.param2], timeSeen: [operation.param3] });
+            } อื่น {
+                สำหรับ (var i = 0; i < this.checkReader.length; i++) {
                     if(this.checkReader[i].group == operation.param1) {
                         if(!this.checkReader[i].users.includes(operation.param2)) {
                             this.checkReader[i].users.push(operation.param2);
@@ -210,211 +210,211 @@ class LINE extends LineAPI {
         }
 
         if(operation.type == 13) { // diinvite
-            if(isAdminOrBot(operation.param2)) {
-                return this._acceptGroupInvitation(operation.param1);
-            } else {
-                return this._cancel(operation.param1,myBot);
+            ถ้า (isAdminOrBot (operation.param2)) {
+                ส่งคืน this._acceptGroupInvitation(operation.param1);
+            } อื่น {
+                ส่งคืน this._cancel(operation.param1,myBot);
             }
         }
-        this.getOprationType(operation);
+        this.getOprationType(การดำเนินการ);
     }
 
-    async cancelAll(gid) {
-        let { listPendingInvite } = await this.searchGroup(gid);
-        if(listPendingInvite.length > 0){
+    async ยกเลิกทั้งหมด (gid) {
+        ให้ { listPendingInvite } = รอ this.searchGroup(gid);
+        ถ้า(listPendingInvite.length > 0){
             this._cancel(gid,listPendingInvite);
         }
     }
 
-    async searchGroup(gid) {
-        let listPendingInvite = [];
-        let thisgroup = await this._getGroups([gid]);
-        if(thisgroup[0].invitee !== null) {
-            listPendingInvite = thisgroup[0].invitee.map((key) => {
-                return key.mid;
+    async searchGroup (gid) {
+        ให้ listPendingInvite = [];
+        ให้ thisgroup = รอนี้._getGroups([gid]);
+        if(กลุ่มนี้[0].เชิญ !== null) {
+            listPendingInvite = กลุ่มนี้[0].invitee.map((คีย์) => {
+                ส่งคืน key.mid;
             });
         }
-        let listMember = thisgroup[0].members.map((key) => {
-            return { mid: key.mid, dn: key.displayName };
+        ให้ listMember = กลุ่มนี้[0].members.map((คีย์) => {
+            ส่งคืน { กลาง: key.mid, dn: key.displayName };
         });
 
-        return { 
-            listMember,
-            listPendingInvite
+        กลับ { 
+            รายการสมาชิก,
+            รายการที่รอดำเนินการเชิญ
         }
     }
 
-    setState(seq,param) {
-		if(param == 1){
-			let isinya = "Setting\n";
-			for (var k in this.stateStatus){
+    setState (seq, พารามิเตอร์) {
+		ถ้า (พารามิเตอร์ == 1){
+			ให้ isinya = "ตั้งค่า\n";
+			สำหรับ (var k ใน this.stateStatus){
                 if (typeof this.stateStatus[k] !== 'function') {
 					if(this.stateStatus[k]==1){
 						isinya += " "+firstToUpperCase(k)+" => on\n";
-					}else{
-						isinya += " "+firstToUpperCase(k)+" => off\n";
+					}อื่น{
+						isinya += " "+firstToUpperCase(k)+" => ปิด\n";
 					}
                 }
             }this._sendMessage(seq,isinya);
-		}else{
+		}อื่น{
         if(!isAdminOrBot(seq.from) || !isStaffOrBot(seq.from)){
-            let [ actions , status ] = seq.text.split(' ');
-            const action = actions.toLowerCase();
+            ให้ [ การกระทำ , สถานะ ] = seq.text.split(' ');
+            การกระทำ const = actions.toLowerCase();
             const state = status.toLowerCase() == 'on' ? 1 : 0;
             this.stateStatus[action] = state;
-			let isinya = "Setting\n";
-			for (var k in this.stateStatus){
+			ให้ isinya = "ตั้งค่า\n";
+			สำหรับ (var k ใน this.stateStatus){
                 if (typeof this.stateStatus[k] !== 'function') {
 					if(this.stateStatus[k]==1){
 						isinya += " "+firstToUpperCase(k)+" => on\n";
-					}else{
-						isinya += " "+firstToUpperCase(k)+" => off\n";
+					}อื่น{
+						isinya += " "+firstToUpperCase(k)+" => ปิด\n";
 					}
                 }
             }
-            //this._sendMessage(seq,`Status: \n${JSON.stringify(this.stateStatus)}`);
+            //this._sendMessage(seq,`สถานะ: \n${JSON.stringify(this.stateStatus)}`);
 			this._sendMessage(seq,isinya);
-        } else {
-            this._sendMessage(seq,`Mohon Maaf Anda Bukan Staff Or Admin~`);
+        } อื่น {
+            this._sendMessage(seq,`Mohon Maaf Anda Bukan Staff หรือ Admin~`);
         }}
     }
 
-    mention(listMember) {
-        let mentionStrings = [''];
-        let mid = [''];
-        for (var i = 0; i < listMember.length; i++) {
-            mentionStrings.push('@'+listMember[i].displayName+'\n');
+    กล่าวถึง (listMember) {
+        ให้เอ่ยถึงสตริง = [''];
+        ให้ mid = [''];
+        สำหรับ (var i = 0; i < listMember.length; i++) {
+            กล่าวถึงStrings.push('@'+listMember[i].displayName+'\n');
             mid.push(listMember[i].mid);
         }
-        let strings = mentionStrings.join('');
-        let member = strings.split('@').slice(1);
+        ให้ strings = talkingStrings.join('');
+        ให้สมาชิก = strings.split('@').slice(1);
         
-        let tmp = 0;
-        let memberStart = [];
-        let mentionMember = member.map((v,k) => {
-            let z = tmp += v.length + 1;
-            let end = z - 1;
-            memberStart.push(end);
-            let mentionz = `{"S":"${(isNaN(memberStart[k - 1] + 1) ? 0 : memberStart[k - 1] + 1 ) }","E":"${end}","M":"${mid[k + 1]}"}`;
-            return mentionz;
+        ให้ tmp = 0;
+        ให้ memberStart = [];
+        ให้กล่าวถึงสมาชิก = member.map((v,k) => {
+            ให้ z = tmp += v.length + 1;
+            ปล่อยให้สิ้นสุด = z - 1;
+            memberStart.push(สิ้นสุด);
+            let talkingz = `{"S":"${(isNaN(memberStart[k - 1] + 1) ? 0 : memberStart[k - 1] + 1 ) }","E":"${end}", "M":"${กลาง[k + 1]}"}`;
+            กลับมาพูดถึง;
         })
-        return {
-            names: mentionStrings.slice(1),
-            cmddata: { MENTION: `{"MENTIONEES":[${mentionMember}]}` }
+        กลับ {
+            ชื่อ: talkingStrings.slice(1),
+            cmddata: { กล่าวถึง: `{"MENTIONEES":[${mentionMember}]}` }
         }
     }
 
-    async leftGroupByName(payload) {
-        let gid = await this._findGroupByName(payload);
-        for (var i = 0; i < gid.length; i++) {
+    async leftGroupByName (เพย์โหลด) {
+        ให้ gid = รอสิ่งนี้._findGroupByName(payload);
+        สำหรับ (var i = 0; i < gid.length; i++) {
             this._leaveGroup(gid[i]);
         }
     }
     
-    async recheck(cs,group) {
-        let users;
-        for (var i = 0; i < cs.length; i++) {
+    async ตรวจสอบอีกครั้ง (cs, กลุ่ม) {
+        ให้ผู้ใช้;
+        สำหรับ (var i = 0; i < cs.length; i++) {
             if(cs[i].group == group) {
-                users = cs[i].users;
+                ผู้ใช้ = cs[i].users;
             }
         }
         
-        let contactMember = await this._getContacts(users);
-        return contactMember.map((z) => {
-                return { displayName: z.displayName, mid: z.mid };
+        ให้ contactMember = รอนี้._getContacts(users);
+        ส่งคืน contactMember.map((z) => {
+                ส่งคืน { displayName: z.displayName, mid: z.mid };
             });
     }
 
-    removeReaderByGroup(groupID) {
-        const groupIndex = this.checkReader.findIndex(v => {
-            if(v.group == groupID) {
-                return v
+    removeReaderByGroup (groupID) {
+        const groupIndex = this.checkReader.findIndex (v => {
+            ถ้า (v.group == groupID) {
+                กลับ v
             }
         })
 
-        if(groupIndex != -1) {
+        ถ้า (groupIndex != -1) {
             this.checkReader.splice(groupIndex,1);
         }
     }
 
-    async textMessage(textMessages, seq, param, lockt) {
-        let [ cmd, ...payload ] = textMessages.split(' ');
-        payload = payload.join(' ');
-        let txt = textMessages.toLowerCase();
-        let messageID = seq.id;
+    async textMessage (textMessages, seq, param, lockt) {
+        ให้ [ cmd, ...payload ] = textMessages.split(' ');
+        เพย์โหลด = payload.join(' ');
+        ให้ txt = textMessages.toLowerCase();
+        ให้ messageID = seq.id;
 
-        const ginfo =  await this._getGroup(seq.to);
+        const ginfo = รอสิ่งนี้._getGroup(seq.to);
         const groupCreator = ('[ginfo.creator.mid]');
         const cot = textMessages.split('@');
         const com = textMessages.split(':');
         const cox = textMessages.split(' ');
 
 
-        if(cmd == 'cancelall') {
-            if(payload == 'group') {
-                let groupid = await this._getGroupsInvited();
+        if(cmd == 'ยกเลิก') {
+            ถ้า (เพย์โหลด == 'กลุ่ม') {
+                ให้ groupid = รอนี้._getGroupsInvited();
 
-                for (let i = 0; i < groupid.length; i++) {
-                    this._rejectGroupInvitation(groupid[i])                    
+                สำหรับ (ให้ i = 0; i < groupid.length; i++) {
+                    this._rejectGroupInvitation(groupid[i]) นี้                    
                 }
-                return;
+                กลับ;
             }
-            if(this.stateStatus.cancel == 1) {
+            ถ้า (this.stateStatus.cancel == 1) {
                 this.cancelAll(seq.to);
             }
         }
 
-		if(vx[1] == "msg" && seq.from == vx[0] && waitMsg == "yes"){
-			let panjang = txt.split("");
-			if(txt == "cancel"){
-				vx[0] = "";vx[1] = "";waitMsg = "no";vx[2] = "";vx[3] = "";
-				this._sendMessage(seq,"CANCELLED");
-			}else if(vx[2] == "arg1" && vx[3] == "mid" && cot[1]){
-				let bang = new Message();bang.to = seq.to;
-				bang.text = "OK !, btw pesan-nya apa ?"
-				this._client.sendMessage(0,bang);
-				let ment = seq.contentMetadata.MENTION;
-			    let xment = JSON.parse(ment);let pment = xment.MENTIONEES[0].M;
-				let midnya = JSON.stringify(pment);
-				vx[4] = midnya;
+		if(vx[1] == "msg" && seq.from == vx[0] && waitMsg == "ใช่"){
+			ให้ panjang = txt.split("");
+			if(txt == "ยกเลิก"){
+				vx[0] = "";vx[1] = "";waitMsg = "ไม่";vx[2] = "";vx[3] = "";
+				this._sendMessage(seq,"ยกเลิก");
+			}อื่น if(vx[2] == "arg1" && vx[3] == "mid" && cot[1]){
+				ให้ปัง = ข้อความใหม่ (); bang.to = seq.to;
+				bang.text = "ตกลง !, btw pesan-nya apa ?"
+				this._client.sendMessage(0,ปัง);
+				ให้ ment = seq.contentMetadata.MENTION;
+			    ให้ xment = JSON.parse(ment);let pment = xment.MENTIONEES[0].M;
+				ให้ midnya = JSON.stringify(pment);
+				vx[4] = มิดเนีย;
 				vx[2] = "arg2";
-			}else if(vx[2] == "arg1" && vx[3] == "mid" && seq.contentType == 13){
-				let midnya = seq.contentMetadata.mid;let bang = new Message();bang.to = seq.to;
-				bang.text = "OK !, btw pesan-nya apa ?"
-				this._client.sendMessage(0,bang);
-				vx[4] = midnya;
+			}อื่น if(vx[2] == "arg1" && vx[3] == "mid" && seq.contentType == 13){
+				ให้ midnya = seq.contentMetadata.mid;let bang = ข้อความใหม่ ();bang.to = seq.to;
+				bang.text = "ตกลง !, btw pesan-nya apa ?"
+				this._client.sendMessage(0,ปัง);
+				vx[4] = มิดเนีย;
 				vx[2] = "arg2";
-			}else if(vx[2] == "arg1" && vx[3] == "mid" && panjang.length > 30){
-				this._sendMessage(seq,"OK !, btw pesan-nya apa ?");
+			}อื่น if(vx[2] == "arg1" && vx[3] == "mid" && panjang.length > 30){
+				this._sendMessage(seq,"ตกลง !, btw pesan-nya apa ?");
 				vx[4] = txt;
 				vx[2] = "arg2";
-			}else if(vx[2] == "arg2" && vx[3] == "mid"){
-				let panjangs = vx[4].split("");
-				let kirim = new Message();let bang = new Message();
+			}อื่น if(vx[2] == "arg2" && vx[3] == "mid"){
+				ให้ panjangs = vx[4].split("");
+				ให้ kirim = ข้อความใหม่ (); ให้ปัง = ข้อความใหม่ ();
 				bang.to = seq.to;
 				if(panjangs[0] == "u"){
 					kirim.toType = 0;
-				}else if(panjangs[0] == "c"){
+				}อื่น if(panjangs[0] == "c"){
 					kirim.toType = 2;
-				}else if(panjangs[0] == "r"){
+				}อื่น if(panjangs[0] == "r"){
 					kirim.toType = 1;
-				}else{
+				}อื่น{
 					kirim.toType = 0;
 				}
-				bang.text = "Terkirim kak !";
+				bang.text = "Terkirim คับ !";
 				kirim.to = vx[4];
 				kirim.text = txt;
-				vx[0] = "";vx[1] = "";waitMsg = "no";vx[2] = "";vx[3] = "";vx[4] = "";
+				vx[0] = "";vx[1] = "";waitMsg = "ไม่";vx[2] = "";vx[3] = "";vx[4] = "";
 				this._client.sendMessage(0, kirim);
-				this._client.sendMessage(0, bang);
-			}else{
+				this._client.sendMessage(0, ปัง);
+			}อื่น{
 				this._sendMessage(seq," How to !msg\nTag / Kirim Kontak / Kirim Mid orang yang mau dikirimkan pesan !");
 			}
 		}if(txt == "msg") {
 			if(vx[2] == null || typeof vx[2] === "undefined" || !vx[2]){
-			    waitMsg = "yes";
-			    vx[0] = seq.from;vx[1] = txt;vx[3] = "mid";
-			    this._sendMessage(seq,"Mau kirim pesan ke siapa kak ?");
+			    waitMsg = "ใช่";
+			    vx[0] = seq.from;vx[1] = txt;vx[3] = "กลาง";
+			    this._sendMessage(seq,"เมา คิริม เปซาน คี เซียปา คัก ?");
 				this._sendMessage(seq,"Tag / Kirim Kontak / Kirim Mid orang yang mau dikirimkan pesan !");
 				vx[2] = "arg1";
 			}else{
