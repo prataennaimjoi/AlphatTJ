@@ -1,77 +1,77 @@
-const thrift = require('thrift-http');
-const unirest = require('unirest');
-const qrcode = require('qrcode-terminal');
-const util = require("util");
-const mime = require("mime");
-const fs = require('fs');
-const path = require('path');
-const rp = require('request-promise');
-const request = require('request');
-const Lyrics = require('../helpers/lirik');
-const Ig = require('../helpers/instagram');
+const thrift = ต้องการ ('thrift-http');
+const unirest = ต้องการ ('unirest');
+const qrcode = ต้องการ ('qrcode-terminal');
+const util = ต้องการ ("util");
+const mime = ต้องการ ("mime");
+const fs = ต้องการ ('fs');
+เส้นทาง const = ต้องการ ('เส้นทาง');
+const rp = ต้องการ ('ขอสัญญา');
+คำขอ const = ต้องการ ('คำขอ');
+const เนื้อเพลง = ต้องการ ('../helpers/lirik');
+const Ig = ต้องการ ('../helpers/instagram');
 
-const LineService = require('../curve-thrift/LineService');
+const LineService = ต้องการ ('../curve-thrift/LineService');
 const {
-  LoginResultType,
-  IdentityProvider,
-  ContentType,
-  Message,
-  LoginRequest
-} = require('../curve-thrift/line_types');
+  เข้าสู่ระบบResultType,
+  ผู้ให้บริการข้อมูลประจำตัว,
+  ชนิดของเนื้อหา,
+  ข้อความ,
+  คำขอเข้าสู่ระบบ
+} = ต้องการ ('../curve-thrift/line_types');
 const imgArr = ['png','jpg','jpeg','gif','bmp','webp'];
 
 
-const PinVerifier = require('./pinVerifier');
-var config = require('./config');
-var moment = require('moment');
-var reqx = new LoginRequest();
-var reqxy = new LoginRequest();
+const PinVerifier = ต้องการ ('./pinVerifier');
+var config = ต้องการ ('./config');
+var moment = ต้องการ ('ช่วงเวลา');
+var reqx = ใหม่ LoginRequest();
+var reqxy = ใหม่ LoginRequest();
 
-function isImg(param) {
-    return imgArr.includes(param);
+ฟังก์ชัน isImg (พารามิเตอร์) {
+    ส่งคืน imgArr.includes (พารามิเตอร์);
 }
 
-function ambilKata(params, kata1, kata2){
-    if(params.indexOf(kata1) === false) return false;
-    if(params.indexOf(kata2) === false) return false;
-    let start = params.indexOf(kata1) + kata1.length;
-    let end = params.indexOf(kata2, start);
-    let returns = params.substr(start, end - start);
-    return returns;
+ฟังก์ชัน ambilKata(params, kata1, kata2){
+    if(params.indexOf(kata1) === false) คืนค่าเท็จ
+    if(params.indexOf(kata2) === false) คืนค่าเท็จ
+    ให้เริ่ม = params.indexOf(kata1) + kata1.length;
+    ให้ end = params.indexOf(kata2, start);
+    ให้ผลตอบแทน = params.substr(เริ่ม, สิ้นสุด - เริ่ม);
+    ผลตอบแทนกลับ;
 }
 
-class LineAPI {
-  constructor() {
+คลาส LineAPI {
+  ตัวสร้าง () {
     this.config = config;
     this.setTHttpClient();
-	this.axz = false;
-	this.axy = false;
+	this.axz = เท็จ;
+	this.axy = เท็จ;
 	this.gdLine = "http://gd2.line.naver.jp";
 	this.gdLine2 = "http://gf.line.naver.jp";
   }
 
-  setTHttpClient(options = {
-    protocol: thrift.TCompactProtocol,
-    transport: thrift.TBufferedTransport,
-    headers: this.config.Headers,
-    path: this.config.LINE_HTTP_URL,
-    https: true
+  setTHttpClient (ตัวเลือก = {
+    โปรโตคอล: thrift.TCompactProtocol,
+    ขนส่ง: thrift.TBufferedTransport,
+    ส่วนหัว: this.config.Headers,
+    เส้นทาง: this.config.LINE_HTTP_URL,
+    https: จริง
   }) {
     options.headers['X-Line-Application'] = 'CHROMEOS\t2.1.5\tChrome_OS\t1';
-//    options.headers['X-Line-Application'] = 'DESKTOPMAC 10.10.2-YOSEMITE-x64    MAC 4.5.0';
-//    options.headers['X-Line-Application'] = 'DESKTOPMAC\t5.3.3-YOSEMITE-x64\tMAC\t10.12.0';
-    this.options = options;
+// options.headers['X-Line-Application'] = 'DESKTOPMAC 10.10.2-YOSEMITE-x64 MAC 4.5.0';
+// options.headers['X-Line-Application'] = 'DESKTOPMAC\t5.3.3-YOSEMITE-x64\tMAC\t10.12.0';
+    this.options = ตัวเลือก;
     this.connection =
       thrift.createHttpConnection(this.config.LINE_DOMAIN_3RD, 443, this.options);
-    this.connection.on('error', (err) => {
-      console.log('err',err);
-      return err;
+    this.connection.on('ข้อผิดพลาด', (ผิดพลาด) => {
+      console.log('err', ผิดพลาด);
+      กลับผิดพลาด;
     });
-		if(this.axz === true){
-			this._channel = thrift.createHttpClient(LineService, this.connection);this.axz = false;
-		} else if(this.axy === true){
-			this._authService = thrift.createHttpClient(LineService, this.connection);this.axy = false;
-		} else {
+		if(this.axz === จริง){
+			this._channel = thrift.createHttpClient(LineService, this.connection);this.axz = เท็จ;
+		} else if(this.axy === จริง){
+			this._authService = thrift.createHttpClient(LineService, this.connection);this.axy = เท็จ;
+		} อื่น {
 		    this._client = thrift.createHttpClient(LineService, this.connection);
 		}
     
@@ -80,81 +80,81 @@ class LineAPI {
   async _chanConn(){
 	  this.options.headers['X-Line-Access'] = this.config.tokenn;
 	  this.options.path = this.config.LINE_CHANNEL_PATH;
-	  this.axz = true;
+	  this.axz = จริง;
 	  this.setTHttpClient(this.options);
-	  return Promise.resolve();
+	  กลับ Promise.resolve();
   }
   
   async _authConn(){
-	  this.axy = true;
+	  this.axy = จริง;
 	  this.options.path = this.config.LINE_RS;
       this.setTHttpClient(this.options);
-	  return Promise.resolve();
+	  กลับ Promise.resolve();
   }
 
-  async _tokenLogin(authToken, certificate) {
+  async _tokenLogin (authToken ใบรับรอง) {
 	this.options.path = this.config.LINE_COMMAND_PATH;
     this.config.Headers['X-Line-Access'] = authToken;config.tokenn = authToken;
     this.setTHttpClient(this.options);
-    return Promise.resolve({ authToken, certificate });
+    ส่งคืน Promise.resolve ({ authToken ใบรับรอง });
   }
 
   _qrCodeLogin() {
     this.setTHttpClient();
-    return new Promise((resolve, reject) => {
+    คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
     this._client.getAuthQrcode(true, 'Nadya',(err, result) => {
       const qrcodeUrl = `line://au/q/${result.verifier}`;
-      qrcode.generate(qrcodeUrl,{small: true});
-      console.info(`\n\nlink qr code is: ${qrcodeUrl}`)
+      qrcode.generate (qrcodeUrl, {เล็ก: จริง});
+      console.info(`\n\nลิงก์รหัส qr คือ: ${qrcodeUrl}`)
       Object.assign(this.config.Headers,{ 'X-Line-Access': result.verifier });
         unirest.get('https://gd2.line.naver.jp/Q')
-          .headers(this.config.Headers)
-          .timeout(120000)
-          .end(async (res) => {
-            const verifiedQr = res.body.result.verifier;
+          .headers (this.config.Headers)
+          .timeout(1200000)
+          .end (ไม่ตรงกัน (res) => {
+            constVerifiedQr = res.body.result.verifier;
 			this._authConn();
 			reqx.type = 1;
 			reqx.verifier = verifiedQr;
 			this._authService.loginZ(reqx,(err,success) => {
-				config.tokenn = success.authToken;
+				config.tokenn = Success.authToken;
 				config.certificate = success.certificate;
 				const authToken = config.tokenn;
-			    const certificate = config.certificate;
+			    ใบรับรอง const = config.certificate;
                 this.options.headers['X-Line-Access'] = config.tokenn;
                 this.options.path = this.config.LINE_COMMAND_PATH;
                 this.setTHttpClient(this.options);
-			    this.options.headers['User-Agent'] = 'Line/2.1.5';
-			    this.axz = true;
+			    this.options.headers['User-Agent'] = 'บรรทัด/2.1.5';
+			    this.axz = จริง;
 			    this.setTHttpClient(this.options);
-			    this.axz = false;
-                resolve({ authToken, certificate, verifiedQr });
+			    this.axz = เท็จ;
+                แก้ไข ({ authToken, ใบรับรอง, VerifiedQr });
 			})
           });
       });
     });
   }
   
-  _xlogin(id,password){
-	  const pinVerifier = new PinVerifier(id, password);
-      return new Promise((resolve, reject) => (
+  _xlogin(id,รหัสผ่าน){
+	  const pinVerifier = PinVerifier ใหม่ (id, รหัสผ่าน);
+      ส่งคืน Promise ใหม่ ((แก้ไข, ปฏิเสธ) => (
 	     this._setProvider(id).then(() => {
 			 this.setTHttpClient();
-			 this._getRSAKeyInfo(this.provider, (key, credentials) => {
+			 this._getRSAKeyInfo (this.provider, (คีย์, หนังสือรับรอง) => {
 				 this.options.path = this.config.LINE_RS;
                  this.setTHttpClient(this.options);
-				 const rsaCrypto = pinVerifier.getRSACrypto(credentials);
+				 const rsaCrypto = pinVerifier.getRSACrypto (ข้อมูลรับรอง);
 				 reqx.type = 0;
 				 reqx.identityProvider = this.provider;
 				 reqx.identifier = rsaCrypto.keyname;
 				 reqx.password = rsaCrypto.credentials;
-				 reqx.keepLoggedIn = true;
+				 reqx.keepLoggedIn = จริง;
 				 reqx.accessLocation = this.config.ip;
 				 reqx.systemName = 'LineAlphatFork-PC';
 				 reqx.e2eeVersion = 0;
-				 try{
+				 ลอง{
 					 this._client.loginZ(reqx,
-					 (err,success) => {
-						 if (err) {
+					 (ผิดพลาดสำเร็จ) => {
+						 ถ้า (ผิดพลาด) {
                              console.log('\n\n');
                              console.error("=> "+err.reason);
                              process.exit();
@@ -163,31 +163,31 @@ class LineAPI {
                          this.setTHttpClient(this.options);
 						 this._authConn();
 						 this._client.pinCode = success.pinCode;
-                		 console.info("\n\n=============================\nEnter This Pincode => "+success.pinCode+"\nto your mobile phone in 2 minutes\n=============================");
-                		 this._checkLoginResultType(success.type, success);
+                		 console.info("\n\n=============================\nป้อน Pincode นี้ => "+success.pinCode+" \nไปยังโทรศัพท์มือถือของคุณใน 2 นาที\n=============================");
+                		 this._checkLoginResultType(success.type, ความสำเร็จ);
 						 reqxy.type = 1;
                		     this._loginWithVerifier((verifierResult) => {
 							 this.options.path = this.config.LINE_COMMAND_PATH;
                              this.setTHttpClient(this.options);
 							 config.tokenn = verifierResult.authToken;
                		         this._checkLoginResultType(verifierResult.type, verifierResult);
-               		         resolve(verifierResult);
+               		         แก้ไข(ผลการตรวจสอบ);
               		     });
 					 });
-				 }catch(error) {
-                     console.log('error');
-                     console.log(error);
+				 }จับ(ผิดพลาด) {
+                     console.log('ข้อผิดพลาด');
+                     console.log (ข้อผิดพลาด);
                  }
 			 })
 		 })
 	  ));
   }
 
-  async _loginWithVerifier(callback) {
-    let retx = await this.getJson(this.config.LINE_CERTIFICATE_URL)
+  async _loginWithVerifier (โทรกลับ) {
+    ให้ retx = รอ this.getJson (this.config.LINE_CERTIFICATE_URL)
 	reqxy.verifier = retx.result.verifier;
 	this._authService.loginZ(reqxy,(err,success) => {
-		callback(success);
+		โทรกลับ(สำเร็จ);
 	})
   }
 
@@ -196,229 +196,229 @@ class LineAPI {
       IdentityProvider.LINE :
       IdentityProvider.NAVER_KR;
 
-    return this.provider === IdentityProvider.LINE ?
+    ส่งคืน this.provider === IdentityProvider.LINE ?
       this.getJson(this.config.LINE_SESSION_LINE_URL) :
       this.getJson(this.config.LINE_SESSION_NAVER_URL);
   }
 
-  _checkLoginResultType(type, result) {
-    this.config.Headers['X-Line-Access'] = result.authToken || result.verifier;
-    if (result.type === LoginResultType.SUCCESS) {
+  _checkLoginResultType(ประเภท, ผลลัพธ์) {
+    this.config.Headers['X-Line-Access'] = result.authToken || ผลการตรวจสอบ;
+    ถ้า (result.type === LoginResultType.SUCCESS) {
       this.certificate = result.certificate;
       this.authToken = result.authToken;
     } else if (result.type === LoginResultType.REQUIRE_QRCODE) {
-      console.log('require QR code');
+      console.log('ต้องการรหัส QR');
     } else if (result.type === LoginResultType.REQUIRE_DEVICE_CONFIRM) {
-      console.log('require device confirm');
-    } else {
-      throw new Error('unkown type');
+      console.log('ต้องยืนยันอุปกรณ์');
+    } อื่น {
+      โยนข้อผิดพลาดใหม่ ('ประเภทที่ไม่รู้จัก');
     }
-    return result;
+    ส่งคืนผลลัพธ์;
   }
   
-  async gooGl(longUri){
-	return new Promise((resolve, reject) => (unirest.post("https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAsxyBNNjSqSKcEEElAzWBERqRF95QMMeY").headers({'Content-Type': 'application/json'}).timeout(120000).send({longUrl: longUri}).end((res) => {res.error ? reject(res.error) : resolve(res.body)})));
+  async gooGl (longUri){
+	ส่งคืน Promise ใหม่ ((แก้ไข, ปฏิเสธ) => (unirest.post("https://www.googleapis.com/urlshortener/v1/url?key=AIzaSyAsxyBNNjSqSKcEEElAzWBERqRF95QMMeY") ส่วนหัว ({'Content-Type': 'application /json'}).timeout(120000).send({longUrl: longUri}).end((res) => {res.error ?reject(res.error) : แก้ไข (res.body)})));
   }
 
-  _sendMessage(message, txt ,seq = 0) {
+  _sendMessage (ข้อความ txt seq = 0) {
     message.text = txt;
-    return this._client.sendMessage(0, message);
+    ส่งคืน this._client.sendMessage(0, ข้อความ);
   }
 
-  _kickMember(group,memid) {
-    return this._client.kickoutFromGroup(0,group,memid);
+  _kickMember (กลุ่ม memid) {
+    ส่งคืน this._client.kickoutFromGroup(0,group,memid);
   }
 
-  _cancel(groupid,member) {
-    return this._client.cancelGroupInvitation(0,groupid,member);
+  _cancel(groupid,สมาชิก) {
+    ส่งคืน this._client.cancelGroupInvitation(0,groupid,member);
   }
 
-  async _getGroupsJoined() {
-    return await this._client.getGroupIdsJoined()
+  async _getGroupsJoined () {
+    กลับมารอ this._client.getGroupIdsJoined()
   }
 
-  async _myProfile() {
-    return await this._client.getProfile();
+  async _myProfile () {
+    กลับมารอ this._client.getProfile();
   }
-  async _getGroupsInvited() {
-    return await this._client.getGroupIdsInvited()
+  async _getGroupsInvited () {
+    กลับมารอ this._client.getGroupIdsInvited()
   }
 
-  async _acceptGroupInvitation(groupid) {
+  async _acceptGroupInvitation (groupid) {
     this._client.acceptGroupInvitation(0,groupid);
-    await this._getGroupsInvited();
-    await this._getGroupsJoined();
-    return;
+    รอสิ่งนี้._getGroupsInvited();
+    รอสิ่งนี้._getGroupsJoined();
+    กลับ;
   }
   
-  _inviteIntoGroup(group,memid) {
-    return this._client.inviteIntoGroup(0,group,memid);
+  _inviteIntoGroup (กลุ่ม memid) {
+    ส่งคืน this._client.inviteIntoGroup(0,group,memid);
   }
 
-  _invite(group,member) {
-    return this._client.inviteIntoGroup(0, group, member)
+  _invite(กลุ่ม,สมาชิก) {
+    ส่งคืน this._client.inviteIntoGroup(0, กลุ่ม, สมาชิก)
   }
 
-  async _updateGroup(group) {
-    return await this._client.updateGroup(0, group)
+  async _updateGroup (กลุ่ม) {
+    กลับมารอ this._client.updateGroup(0, group)
   }
 
-  _getContacts(mid) {
-    return this._client.getContacts(mid)
+  _getContacts (กลาง) {
+    ส่งคืน this._client.getContacts (กลาง)
   }
   
-  _getProfile(mid){
-	  return this._client.getProfile(mid);
+  _getProfile(กลาง){
+	  ส่งคืน this._client.getProfile(กลาง);
   }
 
-  async _getGroups(groupId) {
-      return await this._client.getGroups(groupId);
+  async _getGroups (groupId) {
+      กลับมารอ this._client.getGroups(groupId);
   }
 
-  async _getGroup(groupId) {
-    return await this._client.getGroup(groupId);
+  async _getGroup (groupId) {
+    กลับมารอ this._client.getGroup(groupId);
   }
   
   async _getAllContactIds(){
-	return await this._client.getAllContactIds();
+	กลับมารอ this._client.getAllContactIds();
   }
   
-  async _getRoom(roomId) {
-    return await this._client.getRoom(roomId);
+  async _getRoom (รหัสห้อง) {
+    กลับมารอ this._client.getRoom(roomId);
   }
 
-  async _reissueGroupTicket(groupId) {
-    return await this._client.reissueGroupTicket(groupId);
+  async _reissueGroupTicket (groupId) {
+    กลับมารอ this._client.reissueGroupTicket(groupId);
   }
 
-  async _findGroupByTicket(ticketID){
-    return await this._client.findGroupByTicket(ticketID);
+  async _findGroupByTicket (รหัสตั๋ว){
+    กลับมารอ this._client.findGroupByTicket(ticketID);
   }
   
-  async _acceptGroupInvitationByTicket(gid,ticketID){
-    return await this._client.acceptGroupInvitationByTicket(0,gid,ticketID);
+  async _acceptGroupInvitationByTicket (gid,ticketID){
+    กลับมารอ this._client.acceptGroupInvitationByTicket(0,gid,ticketID);
   }
   
-  async _dlImg(uri, filenames, callback){
-    await rp.head(uri, function(err, res, body){rp(uri).pipe(fs.createWriteStream(filenames)).on('finish', callback);});
+  async _dlImg (uri, ชื่อไฟล์, โทรกลับ){
+    รอ rp.head(uri, function(err, res, body){rp(uri).pipe(fs.createWriteStream(filenames)).on('finish', callback);});
   };
   
-  async _getRSAKeyInfo(provider, callback){
-	  let result = await this._client.getRSAKeyInfo(provider);
-	  callback(result.keynm, result);
+  async _getRSAKeyInfo (ผู้ให้บริการ โทรกลับ){
+	  ให้ผล = รอนี้._client.getRSAKeyInfo(ผู้ให้บริการ);
+	  โทรกลับ (result.keynm, ผลลัพธ์);
   }
   
-  async _fsUnlinkFile(extF,filepaths){
-    fs.unlinkSync(filepaths);
+  async _fsUnlinkFile (extF, filepaths){
+    fs.unlinkSync (เส้นทางของไฟล์);
   }
   
-  async _getServerTime(timestamp){
-      let formatted = moment("/Date("+timestamp+"-0700)/").toString();
-	  return formatted;
+  async _getServerTime (ประทับเวลา){
+      ให้จัดรูปแบบ = moment("/Date("+timestamp+"-0700)/")toString();
+	  ส่งคืนรูปแบบ;
   }
   
-  async _sendImageWithURL(to,urls,extF,filepaths){
-	if(isImg(extF)){
+  async _sendImageWithURL (ไปยัง, url, extF, เส้นทางของไฟล์){
+	ถ้า(isImg(ต่อF)){
 		this._sendFile(to,filepaths,1);
-	}else{
-		let aM = new Message();aM.to = to;aM.text = "Gagal, ekstensi file tidak diperbolehkan !";this._client.sendMessage(0,aM);
+	}อื่น{
+		ให้ aM = ข้อความใหม่ ();aM.to = to;aM.text = "Gagal, ไฟล์ ekstensi tidak diperbolehkan !";this._client.sendMessage(0,aM);
 	}
   }
   
-  _timeParse(secondx){
-	  let sec_num = parseInt(secondx, 10); // don't forget the second param
-      let hours   = Math.floor(sec_num / 3600);
-      let minutes = Math.floor((sec_num - (hours * 3600)) / 60);
-      let seconds = sec_num - (hours * 3600) - (minutes * 60);
+  _timeParse(วินาทีx){
+	  ให้ sec_num = parseInt(secondx, 10); // อย่าลืม param ที่สอง
+      ให้ชั่วโมง = Math.floor(sec_num / 3600);
+      ให้นาที = Math.floor((sec_num - (hours * 3600)) / 60);
+      ให้วินาที = sec_num - (ชั่วโมง * 3600) - (นาที * 60);
 
-    if (hours   < 10) {hours   = "0"+hours;}
-    if (minutes < 10) {minutes = "0"+minutes;}
-    if (seconds < 10) {seconds = "0"+seconds;}
-    return hours+':'+minutes+':'+seconds;
+    ถ้า (ชั่วโมง < 10) {ชั่วโมง = "0"+ชั่วโมง;}
+    ถ้า (นาที < 10) {นาที = "0"+นาที;}
+    ถ้า (วินาที < 10) {วินาที = "0"+วินาที;}
+    ส่งกลับชั่วโมง+':'+นาที+':'+วินาที;
   }
   
-  async _textToSpeech(words,lang,callback){
-	  let namef = __dirname+this.config.FILE_DOWNLOAD_LOCATION+"/tts.mp3";
+  async _textToSpeech (คำ ภาษา การโทรกลับ){
+	  ให้ namef = __dirname+this.config.FILE_DOWNLOAD_LOCATION+"/tts.mp3";
 	  const xoptions = {
-          url: `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(words)}&tl=${lang}&client=tw-ob&ttsspeed=0.24`,
-          headers: {
-              'Referer': 'http://translate.google.com/',
-              'User-Agent': 'stagefright/1.2 (Linux;Android 5.0)'
+          URL: `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(words)}&tl=${lang}&client=tw-ob&ttsspeed=0.24`,
+          ส่วนหัว: {
+              'ผู้อ้างอิง': 'http://translate.google.com/',
+              'ตัวแทนผู้ใช้': 'stagefright/1.2 (Linux; Android 5.0)'
           }
       }
 	  rp(xoptions).pipe(fs.createWriteStream(namef)).on('close', ()=>{callback(namef);})
   }
   
-  async _youSound(urls,callback){
-	  let xurl = urls.replace(/\\/g , "");
-	  let video_id = xurl.split('v=')[1];
-	  let ampersandPosition = video_id.indexOf('&');
-      if(ampersandPosition != -1) {
-          video_id = video_id.substring(0, ampersandPosition);
+  async _youSound (url, โทรกลับ){
+	  ให้ xurl = urls.replace(/\\/g , "");
+	  ให้ video_id = xurl.split('v=')[1];
+	  ให้ ampersandPosition = video_id.indexOf('&');
+      if(เครื่องหมายและตำแหน่ง != -1) {
+          video_id = video_id.substring(0, เครื่องหมายและตำแหน่ง);
       }
 	  const xoptions = {
-          url: "http://www.yt-mp3.com/fetch?v="+video_id+"&referrer=http%3A%2F%2Fwww.yt-mp3.com%2F&apikey=yt-mp3.com",
-          headers: {
-              'Referer': 'http://www.yt-mp3.com',
-              'User-Agent': 'stagefright/1.2 (Linux;Android 5.0)',
+          URL: "http://www.yt-mp3.com/fetch?v="+video_id+"&referrer=http%3A%2F%2Fwww.yt-mp3.com%2F&apikey=yt-mp3.com",
+          ส่วนหัว: {
+              'ผู้อ้างอิง': 'http://www.yt-mp3.com',
+              'ตัวแทนผู้ใช้': 'stagefright/1.2 (Linux; Android 5.0)',
           },
-		  json: true
+		  json: จริง
       }
-	  rp(xoptions).then(function (parsedBody) {
-        callback(parsedBody);
+	  rp (xoptions).then (ฟังก์ชัน (parsedBody) {
+        โทรกลับ (parsedBody);
       })
-    .catch(function (err) {
-        console.info(err);
+    .catch (ฟังก์ชัน (ผิดพลาด) {
+        console.info(ผิดพลาด);
       });
   }
   
-  async _sendFile(message,filepaths, typeContent = 1) {
-    let filename = 'media';
-    let typeFile;
+  async _sendFile (ข้อความ เส้นทางของไฟล์ typeContent = 1) {
+    ให้ชื่อไฟล์ = 'สื่อ';
+    ให้ typeFile;
     
-    switch (typeContent) {
-      case 2:
-        typeFile = 'video'
-        break;
-      case 3:
-        typeFile = 'audio'
-        break;
-      default:
-        typeFile = 'image'
-        break;
+    สวิตช์ (typeContent) {
+      กรณีที่ 2:
+        typeFile = 'วิดีโอ'
+        หยุดพัก;
+      กรณีที่ 3:
+        typeFile = 'เสียง'
+        หยุดพัก;
+      ค่าเริ่มต้น:
+        typeFile = 'รูปภาพ'
+        หยุดพัก;
     }
 
-    let M = new Message();
-    M.to = message.to;
+    ให้ M = ข้อความใหม่ ();
+    M.to = ข้อความถึง;
     M.contentType= typeContent;
     M.contentPreview= null;
     M.contentMetadata= null;
 
 
-    const filepath = path.resolve(filepaths)
-    fs.readFile(filepath,async (err, bufs) => {
-      let imgID = await this._client.sendMessage(0,M);
-        const data = {
-          params: JSON.stringify({
-            name: filename,
-            oid: imgID.id,
-            size: bufs.length,
-            type: typeFile,
-            ver: '1.0'
+    const filepath = path.resolve (เส้นทางไฟล์)
+    fs.readFile (เส้นทางของไฟล์, async (ผิดพลาด, bufs) => {
+      ให้ imgID = รอนี้._client.sendMessage(0,M);
+        ข้อมูล const = {
+          พารามิเตอร์: JSON.stringify ({
+            ชื่อ: ชื่อไฟล์,
+            ออยด์: imgID.id,
+            ขนาด: bufs.length,
+            ชนิด: typeFile,
+            เวอร์ชัน: '1.0'
           })
         };
-        return this
+        ส่งคืนสิ่งนี้
           .postContent(config.LINE_POST_CONTENT_URL, data, filepath)
           .then((res) => {
-            if(res.err) {
+            ถ้า (res.err) {
               console.log('err',res.error)
-              return;
+              กลับ;
             } 
             if(filepath.search(/download\//g) === -1) {
-              fs.unlink(filepath, (err) => {
-                if (err) {
-                  console.log('err on upload',err);
-                  return err
+              fs.unlink (เส้นทางของไฟล์ (ผิดพลาด) => {
+                ถ้า (ผิดพลาด) {
+                  console.log('err on upload', ผิดพลาด);
+                  กลับผิดพลาด
                 };
               });
             }
@@ -427,133 +427,133 @@ class LineAPI {
     });
   }
 
-  async _sendImage(to,filepaths) {
+  async _sendImage (ถึง, เส้นทางไฟล์) {
     this._sendFile(to,filepaths,1);
   }
   
   async _getAlbum(gid,ctoken){
-	let bot = await this._client.getProfile();
-	let optionx = {
+	ให้บอท = รอนี้._client.getProfile();
+	ให้ optionx = {
         uri: this.gdLine+'/mh/album/v3/albums?sourceType=GROUPHOME&homeId='+gid,
-        headers: {
+        ส่วนหัว: {
             "Content-Type": "application/json",
 			"X-Line-Mid": bot.mid,
             "x-lct": ctoken
         }
     };
 
-    return new Promise((resolve, reject) => (
+    ส่งคืน Promise ใหม่ ((แก้ไข, ปฏิเสธ) => (
       unirest.get(optionx.uri)
         .headers(optionx.headers)
-        .timeout(120000)
+        .timeout(1200000)
         .end((res) => (
-          res.error ? reject(res.error) : resolve(res.body)
+          res.error ? ปฏิเสธ (res.error): แก้ไข (res.body)
         ))
     ));
   }
   
   /*async _insertAlbum(gid,albumId,ctoken,img){
-	let bot = await this._client.getProfile();
-	let M = new Message();
+	ให้บอท = รอนี้._client.getProfile();
+	ให้ M = ข้อความใหม่ ();
     M.to = gid;
     M.contentType = 1;
     M.contentPreview = null;
-	//let imgID = await this._client.sendMessage(0,M);//console.info("image/"+x[x.length-1]);
+	//ให้ imgID = รอนี้._client.sendMessage(0,M);//console.info("image/"+x[x.length-1]);
 	console.info("aa");console.info(albumId);console.info(gid);
 
-	const filepath = path.resolve(img)
-    fs.readFile(filepath,async (err, bufs) => {
-      let imgID = await this._client.sendMessage(0,M);
-      console.log(imgID.id);console.info(gid);console.info(bot.mid);console.info(img);
-        const data = {
-          params: JSON.stringify({
-            userid: gid,
-            oid: imgID.id,
-            type: 'image',
-            ver: '1.0'
+	const filepath = path.resolve (img)
+    fs.readFile (เส้นทางของไฟล์, async (ผิดพลาด, bufs) => {
+      ให้ imgID = รอนี้._client.sendMessage(0,M);
+      console.log(imgID.id);console.info(gid);console.info(bot.mid);console.info(img);คอนโซล.log(imgID.id);console.info(gid);console.info(bot.mid);console.info(img);
+        ข้อมูล const = {
+          พารามิเตอร์: JSON.stringify ({
+            รหัสผู้ใช้: gid,
+            ออยด์: imgID.id,
+            ประเภท: 'ภาพ',
+            เวอร์ชัน: '1.0'
           })
         };
-        return this.postAlbum("http://obs-jp.line-apps.com/talk/m/object_info.nhn",bot.mid,albumId,ctoken, data, filepath).then((res) => (res.error ? console.log('err',res.error) : console.log('done')));
+        ส่งคืน this.postAlbum("http://obs-jp.line-apps.com/talk/m/object_info.nhn",bot.mid,albumId,ctoken, data, filepath).then((res) => ( res.error ? console.log('err',res.error): console.log('done')));
     });
   }*/
   
-  async _createAlbum(gid,name,ctoken){
-	let bot = await this._client.getProfile();
-	let optionx = {
-    method: 'POST',
+  async _createAlbum(gid,ชื่อ,ctoken){
+	ให้บอท = รอนี้._client.getProfile();
+	ให้ optionx = {
+    วิธีการ: 'POST',
     uri: this.gdLine+'/mh/album/v3/album?count=1&auto=0&homeId='+gid,
-    body: {
-        type: "image",
-		title: name
+    ร่างกาย: {
+        ประเภท: "ภาพ",
+		ชื่อเรื่อง: ชื่อ
     },
-	headers: {
+	ส่วนหัว: {
         "Content-Type": "application/json",
 		"X-Line-Mid": bot.mid,
         "x-lct": ctoken
     },
-    json: true // Automatically stringifies the body to JSON
+    json: true // ทำให้เนื้อหาเป็น JSON . โดยอัตโนมัติ
     };
 
-    await rp(optionx)
-      .then(function (parsedBody) {
-        //console.info(parsedBody);
+    รอ rp (optionx)
+      .then (ฟังก์ชัน (parsedBody) {
+        //console.info(แยกวิเคราะห์ร่างกาย);
       })
-    .catch(function (err) {
-        //console.info(err);
+    .catch (ฟังก์ชัน (ผิดพลาด) {
+        //console.info(ผิดพลาด);
       });
   }
   
   async _autoLike(ctoken,limit,comment){
-	let homeres = await this._getPost(limit,ctoken);
-	let ress = homeres.result;
-	let posts = ress.posts;
-	for(var i = 0; i < limit; i++){
-		let liked = posts[i].postInfo.liked;
-		let mids = posts[i].userInfo.mid;
-		let postId = posts[i].postInfo.postId;
-		if(liked === false){
-			await this._liking(mids,postId,ctoken,1002);
-			await this._commentTL(mids,postId,ctoken,comment);
+	ให้ homeres = รอนี้._getPost(limit,ctoken);
+	ให้ ress = homeres.result;
+	ให้โพสต์ = ress.posts;
+	สำหรับ (var i = 0; i < limit; i++){
+		ให้ชอบ = โพสต์[i].postInfo.liked;
+		ให้ mids = โพสต์[i].userInfo.mid;
+		ให้ postId = โพสต์[i].postInfo.postId;
+		ถ้า (ชอบ === เท็จ){
+			รอสิ่งนี้._ไลค์(mids,postId,ctoken,1002);
+			รอ this._commentTL(mids,postId,ctoken,comment);
 		}
 		if(posts[i] == posts[posts.length-1]){
-			config.doing = "no";
+			config.doing = "ไม่";
 		}
 	}
   }
   
-  async _commentTL(mid,postId,ctoken,comment){
-	let bot = await this._client.getProfile();
-	let optionx = {
-    method: 'POST',
+  async _commentTL (กลาง, postId, ctoken, ความคิดเห็น){
+	ให้บอท = รอนี้._client.getProfile();
+	ให้ optionx = {
+    วิธีการ: 'POST',
     uri: this.gdLine+'/mh/api/v23/comment/create.json?homeId='+mid,
-    body: {
-        commentText: comment,
-		activityExternalId: postId,
-		actorId: mid
+    ร่างกาย: {
+        commentText: แสดงความคิดเห็น,
+		กิจกรรมExternalId: postId,
+		นักแสดง ID: mid
     },
-	headers: {
+	ส่วนหัว: {
         "Content-Type": "application/json",
 		"X-Line-Mid": bot.mid,
         "x-lct": ctoken
     },
-    json: true // Automatically stringifies the body to JSON
+    json: true // ทำให้เนื้อหาเป็น JSON . โดยอัตโนมัติ
     };
 
-    await rp(optionx)
-      .then(function (parsedBody) {
-        //console.info(parsedBody);
+    รอ rp (optionx)
+      .then (ฟังก์ชัน (parsedBody) {
+        //console.info(แยกวิเคราะห์ร่างกาย);
       })
-    .catch(function (err) {
-        //console.info(err);
+    .catch (ฟังก์ชัน (ผิดพลาด) {
+        //console.info(ผิดพลาด);
       });
   }
   
-  async _liking(mid,postId,ctoken,likeTypes = 1001){
-	let bot = await this._client.getProfile();
-	let optionx = {
-    method: 'POST',
+  async _liking (กลาง, postId, ctoken, likeTypes = 1001) {
+	ให้บอท = รอนี้._client.getProfile();
+	ให้ optionx = {
+    วิธีการ: 'POST',
     uri: this.gdLine+'/mh/api/v23/like/create.json?homeId='+mid,
-    body: {
+    ร่างกาย: {
         likeType: likeTypes,
 		activityExternalId: postId,
 		actorId: mid
