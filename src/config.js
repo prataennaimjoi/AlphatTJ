@@ -1,8 +1,8 @@
-const { hostname, platform } = require('os');
+const { ชื่อโฮสต์, แพลตฟอร์ม } = ต้องการ ('os');
 
-const whichPlatform = platform() === 'darwin' ? 'MAC' : 'win32';
+const thatPlatform = platform() === 'ดาร์วิน' ? 'MAC' : 'win32';
 
-const config = {
+การกำหนดค่า const = {
   LINE_DOMAIN_INDO: 'gd2i.line.naver.jp',
   LINE_DOMAIN_FAST: 'gfv.line.naver.jp',
   LINE_DOMAIN_TOOFAST: 't.line.naver.jp',
@@ -29,31 +29,31 @@ const config = {
   LINE_COMMAND_PATH_2: '/S3',
   LINE_CERTIFICATE_URL: '/Q',
   LINE_SQUARE_PATH: '/SQS1',
-  LINE_CPF: '/CPF', //What is this ?
+  LINE_CPF: '/CPF', //นี่อะไร ?
   LINE_CHANNEL_PATH: '/CH4',
   LINE_SHOP_PATH: '/SHOP4',
   LINE_SESSION_LINE_URL: '/authct/v1/keys/line',
   LINE_SESSION_NAVER_URL: '/authct/v1/keys/naver',
   LINE_POST_CONTENT_URL: 'https://os.line.naver.jp/talk/m/upload.nhn',
   LINE_POST_CONTENT_URL_2ND: 'https://obs-sg.line-apps.com/talk/m/upload.nhn',
-  //X_LINE_APP: 'DESKTOPMAC 10.10.2-YOSEMITE-x64    MAC 4.5.0',
+  //X_LINE_APP: 'DESKTOPMAC 10.10.2-YOSEMITE-x64 MAC 4.5.0',
   X_LINE_APP: 'CHROMEOS\t2.1.5\ptatan1983\tChrome_OS\t1',
-  ip: '127.0.0.1',
-  version: '0.0.2',
-  revision: 0,
-  hostname: hostname(),
-  platform: whichPlatform,
+  ไอพี: '127.0.0.1',
+  เวอร์ชัน: '0.0.2',
+  การแก้ไข: 0,
+  ชื่อโฮสต์: ชื่อโฮสต์ (),
+  แพลตฟอร์ม: แพลตฟอร์มใด,
   EMAIL_REGEX: /[^@]+@[^@]+\.[^@]+/,
-  Headers: {
+  ส่วนหัว: {
     'User-Agent':'Line/7.2.0'
   },
   FILE_DOWNLOAD_LOCATION: '/../download/',
   YT_DL: 'http://www.saveitoffline.com/process/',
-  tokenn: '',
+  โทเค็น: '',
   chanToken: '',
-  certificate: '',
-  botmid: '',
-  doing: 'no'
+  ใบรับรอง: '',
+  ก้น: '',
+  ทำ: 'ไม่'
 };
 
 module.exports = config;
