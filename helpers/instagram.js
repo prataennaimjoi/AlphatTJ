@@ -1,49 +1,49 @@
-let exec = require('child_process').exec
+ให้ exec = ต้องการ ('child_process').exec
 
-module.exports = (usernameIG) => {
-  let cmd = 'wget https://instagram.com/'+usernameIG+' -qO -';
-  let medias = [];
-  return new Promise((resolve, reject) => {
-    exec(cmd,function(err,so){
-      if(err) {
-        reject(err);
-        return err;
+module.exports = (ชื่อผู้ใช้ IG) => {
+  ให้ cmd = 'wget https://instagram.com/'+usernameIG+' -qO -';
+  ให้สื่อ = [];
+  คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
+    exec (cmd, ฟังก์ชั่น (ผิดพลาดดังนั้น) {
+      ถ้า (ผิดพลาด) {
+        ปฏิเสธ(ผิดพลาด);
+        กลับผิดพลาด;
       }
-      output = so.split('window._sharedData = ')
-      if(output.length > 1){
-        let dataScrap = output[1].split(';</script>')
-        let tojson = JSON.parse(dataScrap[0]);
-        let userProfile = tojson.entry_data.ProfilePage[0].user
-        let follower = userProfile.followed_by.count
-        let following = userProfile.follows.count
-        let bio = userProfile.biography
-        let username = userProfile.username
-        let profilePic = userProfile.profile_pic_url
-        let fullname = userProfile.full_name
-        let name = fullname || username
-        let media = userProfile.media.nodes
+      เอาต์พุต = so.split('window._sharedData = ')
+      ถ้า (เอาต์พุตความยาว > 1){
+        ให้ dataScrap = output[1].split(';</script>')
+        ให้ tojson = JSON.parse(dataScrap[0]);
+        ให้ userProfile = tojson.entry_data.ProfilePage[0].user
+        ให้ผู้ติดตาม = userProfile.followed_by.count
+        ให้ติดตาม = userProfile.follows.count
+        ให้ bio = userProfile.biography
+        ให้ชื่อผู้ใช้ = userProfile.username
+        ให้ profilePic = userProfile.profile_pic_url
+        ให้ชื่อเต็ม = userProfile.full_name
+        ให้ชื่อ = ชื่อเต็ม || ชื่อผู้ใช้
+        ให้สื่อ = userProfile.media.nodes
         
-		if( media.length > 0 ){
-          for (var i = 0; i < 2; i++) {
+		ถ้า (media.length > 0){
+          สำหรับ (var i = 0; i < 2; i++) {
             if(typeof media[i].thumbnail_src !== 'undefined') {
-              medias.push(media[i].thumbnail_src);
-            } else {
-              medias = ' No Photo Uploaded ';
+              medias.push(สื่อ[i].thumbnail_src);
+            } อื่น {
+              สื่อ = 'ไม่ได้อัปโหลดรูปภาพ';
             }
           }
-        } else {
-          medias = '- User Is Private -';
+        } อื่น {
+          สื่อ = '- ผู้ใช้เป็นแบบส่วนตัว -';
         }
-        let data = {
-          userProfile: userProfile.profile_pic_url,
-          userName: name,
-          bio : bio,
-          media: medias,
-          follow :`Follower: ${follower} <=> Following: ${following}`,
+        ให้ data = {
+          โปรไฟล์ผู้ใช้: userProfile.profile_pic_url,
+          ชื่อผู้ใช้: ชื่อ,
+          ไบโอ : ไบโอ,
+          สื่อ: สื่อ,
+          ติดตาม :`ผู้ติดตาม: ${ผู้ติดตาม} <=> กำลังติดตาม: ${กำลังติดตาม}`,
         };
-        resolve(data)
-      } else {
-        resolve('not found')
+        แก้ไข (ข้อมูล)
+      } อื่น {
+        แก้ไข ('ไม่พบ')
       }
     })
   })
