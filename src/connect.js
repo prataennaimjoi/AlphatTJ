@@ -1,111 +1,112 @@
-const LineAPI = ต้องการ ('./api');
-var config = ต้องการ ('./config');
-var moment = ต้องการ ('ช่วงเวลา');
+const LineAPI  = require('./api');
+var config = require('./config');
+var moment = require('moment');
 
-คลาส LineConnect ขยาย LineAPI {
+class LineConnect extends LineAPI {
 
-  ตัวสร้าง (ตัวเลือก) {
-    ซุปเปอร์ ();
+  constructor(options) {
+    super();
 
-    if (ตัวเลือกประเภท !== 'undefined') {
+    if (typeof options !== 'undefined') {
       this.authToken = options.authToken;
-	  this.email = options.email;
-	  this.password = options.password;
+    this.email = options.email;
+    this.password = options.password;
       this.certificate = options.certificate;
       this.config.Headers['X-Line-Access'] = options.authToken;
     }
   }
   
   getQrFirst() {
-    คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
+    return new Promise((resolve,reject) => {
       this._qrCodeLogin().then(async (res) => {
         this.authToken = res.authToken;
         this.certificate = res.certificate;
-        console.info(`[*] โทเค็น: ${this.authToken}`);
-        console.info(`[*] ใบรับรอง: ${res.certificate}`);
-        ให้ { mid, displayName } = รอ this._client.getProfile();config.botmid = mid;
-        console.info(`[*] ID: ${กลาง}`);
-        console.info(`[*] ชื่อ: ${displayName}`);
-        รอ this._tokenLogin(this.authToken, this.certificate);
-		รอ._chanConn();
-		ให้ icH = รอนี้._channel.issueChannelToken("1626556804");config.chanToken = icH.channelAccessToken;
-		ให้ xxc = icH.expiration;ให้ xcc = xxc.toString().split(" ");ให้ xc = xcc.toString();
-		ปล่อยให้หมดอายุCH = moment("/Date("+xc+"-0700)/")toString();
-		console.info("[*] ChannelToken: "+icH.channelAccessToken);
-		console.info("[*] ChannelTokenExpire: "+expireCH+"\n");
-		console.info(`หมายเหตุ: อย่าลืมใส่ admin ของคุณไว้ที่ตัวแปร 'myBot' ใน main.js \n`);
-        console.info(`ขอแสดงความนับถือ Alfathdirk และขอบคุณสำหรับทีม TCR \n`);
-        console.info(`=======LINE AlphatJS (TJ)======\n`);
-        แก้ไข ();
+        console.info(`[*] Token: ${this.authToken}`);
+        console.info(`[*] Certificate: ${res.certificate}`);
+        let { mid, displayName } = await this._client.getProfile();config.botmid = mid;
+        console.info(`[*] ID: ${mid}`);
+        console.info(`[*] Name: ${displayName}`);
+        await this._tokenLogin(this.authToken, this.certificate);
+        await this._chanConn();
+        let icH = await this._channel.issueChannelToken("1341209950");config.chanToken = icH.channelAccessToken;
+        let xxc = icH.expiration;let xcc = xxc.toString().split(" ");let xc = xcc.toString();
+        let expireCH = moment("/Date("+xc+"-0700)/").toString();
+        console.info("[*] ChannelToken: "+icH.channelAccessToken);
+        console.info("[*] ChannelTokenExpire: "+expireCH+"\n");
+        console.info(`NOTE: Dont forget , put your mid and admin on variable 'myBot' in main.js \n`);
+        console.info(`Regrads Alfathdirk and thx for TCR Team \n`);
+        console.info(`Fixed by Ervan R.F @LD TEAM\n`);
+        console.info(`=======BOT RUNNING======\n`);
+        resolve();
       });
     });
   }
 
   async startx () {
-    ถ้า (this.authToken){
-		คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
-		    this._tokenLogin(this.authToken, this.certificate);
-		    this._chanConn();
-		    this._channel.issueChannelToken("1626556804",(ผิดพลาด ผลลัพธ์)=>{
-				config.chanToken = result.channelAccessToken;
-				this._client.getLastOpRevision((ผิดพลาด,ผลลัพธ์)=>{
-					ให้ xrx = result.toString().split(" ");
-					this.revision = xrx[0].toString() - 1;
-					แก้ไข (this.longpoll());
-				})
-			});
-        });
-    } else if (th.password && this.email){
-		คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
-			this._xlogin(this.email,this.password).then(()=>{
-				this._chanConn();
-				console.info("เข้าสู่ระบบสำเร็จ!");
-				console.info(`\n[*] โทเค็น: ${config.tokenn}`);
-				this.config.Headers['X-Line-Access'] = config.tokenn;
-				this._channel.issueChannelToken("1626556804",(ผิดพลาด ผลลัพธ์)=>{
-					config.chanToken = result.channelAccessToken;
-					this._client.getLastOpRevision((ผิดพลาด,ผลลัพธ์)=>{
-					    ให้ xrx = result.toString().split(" ");
-					    this.revision = xrx[0].toString() - 1;
-					    แก้ไข (this.longpoll());
-				    })
-				});
-			})
-        });
-	} อื่น {
-      คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
-        this.getQrFirst().then(async (res) => {
-          this._client.getLastOpRevision((ผิดพลาด,ผลลัพธ์)=>{
-			ให้ xrx = result.toString().split(" ");
-			this.revision = xrx[0].toString() - 1;
-			แก้ไข (this.longpoll());
-		  })
+    if (this.authToken){
+    return new Promise((resolve, reject) => {
+        this._tokenLogin(this.authToken, this.certificate);
+        this._chanConn();
+        this._channel.issueChannelToken("1341209950",(err, result)=>{
+        config.chanToken = result.channelAccessToken;
+        this._client.getLastOpRevision((err,result)=>{
+          let xrx = result.toString().split(" ");
+          this.revision = xrx[0].toString() - 1;
+          resolve(this.longpoll());
+        })
+      });
+    });
+    } else if(this.password && this.email){
+    return new Promise((resolve, reject) => {
+      this._xlogin(this.email,this.password).then(()=>{
+        this._chanConn();
+        console.info("Success Login!");
+        console.info(`\n[*] Token: ${config.tokenn}`);
+        this.config.Headers['X-Line-Access'] = config.tokenn;
+        this._channel.issueChannelToken("1341209950",(err, result)=>{
+          config.chanToken = result.channelAccessToken;
+          this._client.getLastOpRevision((err,result)=>{
+              let xrx = result.toString().split(" ");
+              this.revision = xrx[0].toString() - 1;
+              resolve(this.longpoll());
+            })
         });
       })
-    }
+        });
+  } else {
+    return new Promise((resolve, reject) => {
+      this.getQrFirst().then(async (res) => {
+        this._client.getLastOpRevision((err,result)=>{
+          let xrx = result.toString().split(" ");
+          this.revision = xrx[0].toString() - 1;
+          resolve(this.longpoll());
+        })
+      });
+    })
+  }
   }
   
-  async fetchOps (rev) {
-    ส่งคืน this._fetchOps(rev, 5);
+  async fetchOps(rev) {
+    return this._fetchOps(rev, 5);
   }
 
-  async fetchOperations (rev) {
-    ส่งคืน this._fetchOperations(rev, 5);
+  async fetchOperations(rev) {
+    return this._fetchOperations(rev, 5);
     
   }
 
-  ลองโพล () {
-    คืนสัญญาใหม่ ((แก้ไข, ปฏิเสธ) => {
+  longpoll() {
+    return new Promise((resolve, reject) => {
       this._fetchOps(this.revision, 5).then((operations) => {
         if (!operations) {
-          console.log('ไม่มีการดำเนินการ');
-          ปฏิเสธ('ไม่มีการดำเนินการ');
-          กลับ;
+          console.log('No operations');
+          reject('No operations');
+          return;
         }
-        ส่งคืน operation.map((operation) => {
+        return operations.map((operation) => {
               if(operation.revision.toString() != -1) {
-                ให้ revisionNum = operation.revision.toString();
-                แก้ไข ({ จำนวนการแก้ไข, การดำเนินการ });
+                let revisionNum = operation.revision.toString();
+                resolve({ revisionNum, operation });
               }
         });
       });
