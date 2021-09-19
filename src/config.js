@@ -1,8 +1,8 @@
-const { ชื่อโฮสต์, แพลตฟอร์ม } = ต้องการ ('os');
+const { hostname, platform } = require('os');
 
-const thatPlatform = platform() === 'ดาร์วิน' ? 'MAC' : 'win32';
+const whichPlatform = platform() === 'darwin' ? 'MAC' : 'win32';
 
-การกำหนดค่า const = {
+const config = {
   LINE_DOMAIN_INDO: 'gd2i.line.naver.jp',
   LINE_DOMAIN_FAST: 'gfv.line.naver.jp',
   LINE_DOMAIN_TOOFAST: 't.line.naver.jp',
@@ -29,32 +29,24 @@ const thatPlatform = platform() === 'ดาร์วิน' ? 'MAC' : 'win32';
   LINE_COMMAND_PATH_2: '/S3',
   LINE_CERTIFICATE_URL: '/Q',
   LINE_SQUARE_PATH: '/SQS1',
-  LINE_CPF: '/CPF', //นี่อะไร ?
+  LINE_CPF: '/CPF', //What is this ?
   LINE_CHANNEL_PATH: '/CH4',
   LINE_SHOP_PATH: '/SHOP4',
   LINE_SESSION_LINE_URL: '/authct/v1/keys/line',
   LINE_SESSION_NAVER_URL: '/authct/v1/keys/naver',
   LINE_POST_CONTENT_URL: 'https://os.line.naver.jp/talk/m/upload.nhn',
   LINE_POST_CONTENT_URL_2ND: 'https://obs-sg.line-apps.com/talk/m/upload.nhn',
-  //X_LINE_APP: 'DESKTOPMAC 10.14.6-YOSEMITE-x64 MAC 93.0.4577.82',
-  X_LINE_APP: 'CHROMEOS\10066.0.0\ptatan1983\tChrome_OS\t1',
-  X_LINE_APP: 'CHROMEAndroid\1.180610.011\ptatan1983\CHROME_Android\t1',
-  ไอพี: '49.48.51.149',
-  เวอร์ชัน: '4.0.0',
-  การแก้ไข: 0,
-  ชื่อโฮสต์: ชื่อโฮสต์ (),
-  แพลตฟอร์ม: แพลตฟอร์มใด,
+  X_LINE_APP: 'IOSIPAD 7.14.0 iPhone OS 10.12.0',
+  //X_LINE_APP: 'CHROMEOS 1.4.13  Chrome_OS 1',
+  ip: '127.0.0.1',
+  version: '0.0.2',
+  revision: 0,
+  hostname: hostname(),
+  platform: whichPlatform,
   EMAIL_REGEX: /[^@]+@[^@]+\.[^@]+/,
-  ส่วนหัว: {
-    'User-Agent':'Line/7.2.0'
-  },
-  FILE_DOWNLOAD_LOCATION: '/../download/',
-  YT_DL: 'http://www.saveitoffline.com/process/',
-  โทเค็น: '',
-  chanToken: '',
-  ใบรับรอง: '',
-  ก้น: '',
-  ทำ: 'ไม่'
+  Headers: {
+    'User-Agent':'Line/7.18.1'
+  }
 };
 
 module.exports = config;
