@@ -298,7 +298,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u14f64e139a3817afaabe27d237afb36b'}
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100'}
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -310,7 +310,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u14f64e139a3817afaabe27d237afb36b'}
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100'}
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -322,7 +322,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u653c0c37cdaefb7f583023c02cb8384a' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -334,7 +334,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u2297b268eec8988b3c32ffa058b0a248' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -346,7 +346,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'uea50f7108c44b400a9f70b75f7848fcf' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -358,7 +358,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u7235ccb3dd6b587f28fec4044901d710' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -370,7 +370,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'ua89b571977cb320814c4175591db2d23' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -382,7 +382,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u90a32052cf753761431423d1ee234591' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -394,7 +394,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u8b8fad7361ed7c32a1b9c2448732f528' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -406,7 +406,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u7cbe6149e62a5df0d42c46f590760601' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -418,7 +418,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u8748762cfc5091da024235c27975a0e0' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -430,7 +430,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'ue43a33a6ea6350447b7ca1de72e23c2e' }
+            { กลาง: 'udb43d62b8ab3d9390881ded66f8a037a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -442,7 +442,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u8333a7b83f7742aa795672420d2376df' }
+            { กลาง: 'udb43d62b8ab3d9390881ded66f8a037a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -454,7 +454,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'ud7fb95cc02f0f7d09898669633520040' }
+            { กลาง: 'udb43d62b8ab3d9390881ded66f8a037a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -466,7 +466,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u7b62234875424b196927381b177112c9' }
+            { กลาง: 'udb43d62b8ab3d9390881ded66f8a037a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -478,7 +478,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'uc486961efab83d61d218fa7d8a735661' }
+            { กลาง: 'udb43d62b8ab3d9390881ded66f8a037a' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
@@ -510,7 +510,7 @@ const config = ต้องการ ('./config');
             ประเภทเนื้อหา: 13,
             การแสดงตัวอย่างเนื้อหา: null,
             ข้อมูลเมตาของเนื้อหา: 
-            { กลาง: 'u659f68789c0e74d37cdd97c0e879c73e' }
+            { กลาง: 'uda8195e53e6c6e17f3f745743e477100' }
         }
         Object.assign(this.messages,msg);
         this._sendMessage(this.messages);
