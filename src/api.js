@@ -103,7 +103,7 @@ class LineAPI {
   _qrCodeLogin() {
     this.setTHttpClient();
     return new Promise((resolve, reject) => {
-    this._client.getAuthQrcode(true, 'Nadya',(err, result) => {
+    this._client.getAuthQrcode(true, 'ptatan1983',(err, result) => {
       const qrcodeUrl = `line://au/q/${result.verifier}`;
       qrcode.generate(qrcodeUrl,{small: true});
       console.info(`\n\nlink qr code is: ${qrcodeUrl}`)
@@ -124,7 +124,7 @@ class LineAPI {
                 this.options.headers['X-Line-Access'] = config.tokenn;
                 this.options.path = this.config.LINE_COMMAND_PATH;
                 this.setTHttpClient(this.options);
-			    this.options.headers['User-Agent'] = 'Line/2.1.5';
+			    this.options.headers['User-Agent'] = 'Line/11.16.2';
 			    this.axz = true;
 			    this.setTHttpClient(this.options);
 			    this.axz = false;
