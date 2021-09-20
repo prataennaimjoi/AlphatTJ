@@ -37,15 +37,16 @@ const config = {
   LINE_POST_CONTENT_URL: 'https://os.line.naver.jp/talk/m/upload.nhn',
   LINE_POST_CONTENT_URL_2ND: 'https://obs-sg.line-apps.com/talk/m/upload.nhn',
   //X_LINE_APP: 'DESKTOPMAC 10.10.2-YOSEMITE-x64    MAC 4.5.0',
-  X_LINE_APP: 'CHROMEOS\t2.1.5\tNadya\tChrome_OS\t1',
+  //X_LINE_APP: 'CHROMEOS\t2.1.5\tNadya\tChrome_OS\t1',
+  X_LINE_APP: 'IOSIPAD\x605.1.15\x09iPhone_OS\x605.1.15',
   ip: '127.0.0.1',
-  version: '0.0.2',
+  version: '0.0.3',
   revision: 0,
   hostname: hostname(),
   platform: whichPlatform,
   EMAIL_REGEX: /[^@]+@[^@]+\.[^@]+/,
   Headers: {
-    'User-Agent':'Line/2.1.5'
+    'User-Agent':'Line/11.16.2'
   },
   FILE_DOWNLOAD_LOCATION: '/../download/',
   YT_DL: 'http://www.saveitoffline.com/process/',
