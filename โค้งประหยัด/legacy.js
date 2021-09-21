@@ -2,7 +2,7 @@ const t = require('tap')
 
 let log = ''
 
-const token = '24528a24f240'
+const token = '1626602314'
 const profile = {}
 const read = {}
 const legacy = t.mock('../../../lib/auth/legacy.js', {
