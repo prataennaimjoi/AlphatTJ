@@ -140,7 +140,7 @@ class LINE extends LineAPI {
            if(operation.type == 16 && this.stateStatus.sambutan == 1) {
              let itil = new Message();
              itil.to = operation.param1;
-             itil.text = "Terima Kasih Telah Invite Saya Di Group Anda ^_^\n\nSilahkan Ketik [help] Untuk Mengetahui Command Bot Kami.\n\n-NADYA-"
+             itil.text = "Terima Kasih Telah Invite Saya Di Group Anda ^_^\n\nSilahkan Ketik [help] Untuk Mengetahui Command Bot Kami.\n\n-PTATAN1983-"
              this._client.sendMessage(0, itil);
            }
 
@@ -480,15 +480,15 @@ class LINE extends LineAPI {
         }
 
         if(txt == 'help') {
-           this._sendMessage(seq, '==============================\n αll cσmmαnd\n==============================\n☞ gift\n☞ halo\n☞ help\n☞ creator\n☞ Bc [Jumlah] /[Text] (Jika Bc On)\n☞ info group\n☞ group creator\n☞ tag all\n☞ speed\n☞ set\n☞ check\n☞ status/setting\n☞ clear\n☞ hak admin dan staff\n\n==============================\n\n==============================\n☞ respon\n☞ Open url\n☞ Close url\n☞ bye\n☞ spam\n☞ Cancel on/off\n☞ Lockinvite on/off\n☞ Lockupdategroup on/off\n☞ LockJoin on/off\n☞ LockCancel on/off\n☞ Autokick on/off\n☞ Autojoin on/off\n☞ Kill「@」\n☞ msg\n☞ Bc on/off\n☞ Sambutan on/off\n\n==============================\n\n==============================\n☞ mute\n☞ unmute\n☞ add staff\n☞ remove staff\n\n==============================\nN A D Y A\n==============================');
+           this._sendMessage(seq, '==============================\n αll cσmmαnd\n==============================\n☞ gift\n☞ halo\n☞ help\n☞ creator\n☞ Bc [Jumlah] /[Text] (Jika Bc On)\n☞ info group\n☞ group creator\n☞ tag all\n☞ speed\n☞ set\n☞ check\n☞ status/setting\n☞ clear\n☞ hak admin dan staff\n\n==============================\n\n==============================\n☞ respon\n☞ Open url\n☞ Close url\n☞ bye\n☞ spam\n☞ Cancel on/off\n☞ Lockinvite on/off\n☞ Lockupdategroup on/off\n☞ LockJoin on/off\n☞ LockCancel on/off\n☞ Autokick on/off\n☞ Autojoin on/off\n☞ Kill「@」\n☞ msg\n☞ Bc on/off\n☞ Sambutan on/off\n\n==============================\n\n==============================\n☞ mute\n☞ unmute\n☞ add staff\n☞ remove staff\n\n==============================\nPTATAN1983\n==============================');
         }
 
          if(txt == 'hak admin dan staff' || txt == 'hak staff dan admin') {
-            this._sendMessage(seq, 'Staff Bisa Memakai Command Yang Di Staff Dan All Tetapi Tidak Bisa Memakai Command Yang Di Admin Serta Tidak Bisa Inv Bot Ke Group Mana Pun (Isitilah Nya Kek CreatorGroup Siri Lah Tpi Tidak Bisa Change, Kalo Mao Change Perlu Minta Ke Admin)\n\nKalo Admin Bisa Memakai Command All, Staff, Admin Dan Membawa Bot Kemana Pun Tanpa Limit (Kecuali Situ Limit Inv)\n\n-NADYA-');
+            this._sendMessage(seq, 'Staff Bisa Memakai Command Yang Di Staff Dan All Tetapi Tidak Bisa Memakai Command Yang Di Admin Serta Tidak Bisa Inv Bot Ke Group Mana Pun (Isitilah Nya Kek CreatorGroup Siri Lah Tpi Tidak Bisa Change, Kalo Mao Change Perlu Minta Ke Admin)\n\nKalo Admin Bisa Memakai Command All, Staff, Admin Dan Membawa Bot Kemana Pun Tanpa Limit (Kecuali Situ Limit Inv)\n\n-PTATAN1983-');
          }
 
          if(txt == 'status') {
-            this._sendMessage(seq,`Status: \n${JSON.stringify(this.stateStatus)}\n\n*Note: Jika Status Menunjukkan 0 Itu Berarti Off Dan Jika Status Menunjukkan 1 Itu Berarti On.\n\n-NADYA-`);
+            this._sendMessage(seq,`Status: \n${JSON.stringify(this.stateStatus)}\n\n*Note: Jika Status Menunjukkan 0 Itu Berarti Off Dan Jika Status Menunjukkan 1 Itu Berarti On.\n\n-PTATAN1983-`);
           }
 
 		if(txt == "setting"){
