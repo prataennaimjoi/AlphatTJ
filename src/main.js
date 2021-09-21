@@ -504,7 +504,7 @@ class LINE extends LineAPI {
 
           if(txt == 'gift') {
              seq.contentType = 9
-             seq.contentMetadata = {'PRDID': 'a0768339-c2d3-4189-9653-2909e9bb6f58','PRDTYPE': 'THEME','MSGTPL': '5'};
+             seq.contentMetadata = {'PRDID': '171da2f1-d71b-449d-ab5a-b68659c0fa15','PRDTYPE': 'THEME','MSGTPL': '5'};
              this._client.sendMessage(1, seq);
           }
 
@@ -570,9 +570,9 @@ let { listMember } = await this.searchGroup(seq.to);
          }
 
         if(txt == 'creator') {
-           this._sendMessage(seq, 'My Creator Is Bee\nId Line : http://line.me/ti/p/~nad_nad.\n\n-NADYA-');
+           this._sendMessage(seq, 'My Creator Is Bee\nId Line : http://line.me/ti/p/~ptatan1983.\n\n-PTATAN1983-');
            seq.contentType=13;
-           seq.contentMetadata = { mid: 'u14f64e139a3817afaabe27d237afb36b' };
+           seq.contentMetadata = { mid: 'uda8195e53e6c6e17f3f745743e477100' };
            this._client.sendMessage(1, seq);
         }
 
@@ -661,7 +661,7 @@ let { listMember } = await this.searchGroup(seq.to);
         
         if(txt == 'bye') {
            if(!isAdminOrBot(seq.from) || !isStaffOrBot(seq.from)){
-          let txt = await this._sendMessage(seq, 'Kami Dari Anak Nadya Mengucapkan Terima Kasih Atas Groupnya Dan Kami Izin Leave~');
+          let txt = await this._sendMessage(seq, 'Kami Dari Anak ptatan1983 Mengucapkan Terima Kasih Atas Groupnya Dan Kami Izin Leave~');
           this._leaveGroup(seq.to);
         }
     }
